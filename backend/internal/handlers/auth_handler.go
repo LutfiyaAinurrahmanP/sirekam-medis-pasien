@@ -89,11 +89,11 @@ func (h *AuthHandler) Logout(c *fiber.Ctx) error {
 
 	// 3. Get user ID dari context (di-set oleh JWT middleware)
 	userID := middlewares.GetUserIDFromContext(c)
-	
+
 	// Debug: Log untuk debugging
 	// Uncomment baris di bawah untuk debugging
 	// fmt.Printf("DEBUG Logout - UserID from context: %d\n", userID)
-	
+
 	if userID == 0 {
 		// Jika userID masih 0, berarti middleware tidak jalan atau ada masalah
 		return utils.UnauthorizedResponse(c, "Invalid user session. Please ensure you are logged in.")
@@ -103,7 +103,7 @@ func (h *AuthHandler) Logout(c *fiber.Ctx) error {
 	if err := h.authService.Logout(token, userID); err != nil {
 		// Log error untuk debugging
 		// fmt.Printf("DEBUG Logout Error: %v\n", err)
-		return utils.InternalServerErrorResponse(c, "Failed to logout: " + err.Error())
+		return utils.InternalServerErrorResponse(c, "Failed to logout: "+err.Error())
 	}
 
 	// 5. Response sukses

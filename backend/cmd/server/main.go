@@ -41,7 +41,7 @@ func main() {
 	migrator := database.NewMigrator(db)
 
 	modelsToMigrate := []interface{}{
-		&models.User{}, // Model User dengan field role
+		&models.User{},           // Model User dengan field role
 		&models.TokenBlacklist{}, // Token blacklist untuk logout
 	}
 
@@ -126,7 +126,7 @@ func main() {
 		AuthHandler: authHandler,
 		UserHandler: userHandler,
 		JWTSecret:   cfg.JWTSecret,
-		TokenRepo: tokenRepo,
+		TokenRepo:   tokenRepo,
 	}
 
 	SetupRoutes(app, routeConfig)

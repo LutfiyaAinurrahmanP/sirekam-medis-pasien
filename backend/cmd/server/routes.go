@@ -11,7 +11,7 @@ type RouteConfig struct {
 	AuthHandler *handlers.AuthHandler
 	UserHandler *handlers.UserHandler
 	JWTSecret   string
-	TokenRepo repositories.TokenRepository
+	TokenRepo   repositories.TokenRepository
 }
 
 // SetupRoutes mendaftarkan semua routes ke Fiber app
@@ -64,7 +64,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 
 	admin := app.Group("/admin")
 	admin.Use(middlewares.JWTAuthMiddleware(config.JWTSecret, config.TokenRepo)) // Require authentication
-	admin.Use(middlewares.RequireAdmin())                      // Require admin role
+	admin.Use(middlewares.RequireAdmin())                                        // Require admin role
 	{
 		// GET /admin/dashboard - Admin dashboard
 		// TODO: Implement admin dashboard handler
@@ -128,7 +128,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 
 	userRoute := app.Group("/user")
 	userRoute.Use(middlewares.JWTAuthMiddleware(config.JWTSecret, config.TokenRepo)) // Require authentication
-	userRoute.Use(middlewares.RequireUser())                       // Require user role
+	userRoute.Use(middlewares.RequireUser())                                         // Require user role
 	{
 		// GET /user/dashboard - User dashboard
 		// TODO: Implement user dashboard handler

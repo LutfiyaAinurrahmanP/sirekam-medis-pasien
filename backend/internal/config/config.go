@@ -55,9 +55,9 @@ func loadEnvFile() error {
 	// List path yang akan dicoba untuk mencari .env file
 	// Urutan: dari yang paling specific ke yang paling general
 	envPaths := []string{
-		".env",                    // Current directory (saat run dari backend/)
-		"../.env",                 // Parent directory (root folder)
-		"../../.env",              // 2 level up (jika run dari backend/cmd/server/)
+		".env",                               // Current directory (saat run dari backend/)
+		"../.env",                            // Parent directory (root folder)
+		"../../.env",                         // 2 level up (jika run dari backend/cmd/server/)
 		filepath.Join(getRootPath(), ".env"), // Root project path
 	}
 
@@ -93,12 +93,12 @@ func getRootPath() string {
 
 		// Naik 1 level
 		parent := filepath.Dir(dir)
-		
+
 		// Jika sudah sampai root filesystem, stop
 		if parent == dir {
 			break
 		}
-		
+
 		dir = parent
 	}
 
