@@ -14,7 +14,7 @@ type CreateAppointmentRequest struct {
 }
 
 type UpdateAppointmentRequest struct {
-  PatientID       uint      `json:"patient_id" validate:"omitempty"`
+	PatientID       uint      `json:"patient_id" validate:"omitempty"`
 	DoctorID        uint      `json:"doctor_id" validate:"omitempty"`
 	AppointmentDate time.Time `json:"appointment_date" validate:"omitempty"`
 	AppointmentTime string    `json:"appointment_time" validate:"omitempty"` // HH:MM:SS

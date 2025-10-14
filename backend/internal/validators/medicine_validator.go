@@ -1,29 +1,29 @@
 package validators
 
 type CreateMedicineRequest struct {
-  	Name          string         `json:"name" validate:"required,max=200"`
-	GenericName   string         `json:"generic_name" validate:"omitempty,max=200"`
-	BrandName     string         `json:"brand_name" validate:"omitempty,max=200"`
-	Type          string         `json:"type" validate:"required,oneof=tablet capsule syrup injection ointment other"`
-	Strength      string         `json:"strength" validate:"omitempty,max=50"` // e.g., "500mg"
-	Manufacturer  string         `json:"manufacturer" validate:"omitempty,max=100"`
-	Unit          string         `json:"unit" validate:"omitempty,max=20"` // tablet, ml, mg
-	StockQuantity int            `json:"stock_quantity" validate:"required"`
-	Price         *float64       `json:"price" validate:"omitempty"`
-	IsActive      bool           `json:"is_active" validate:"required"`
+	Name          string   `json:"name" validate:"required,max=200"`
+	GenericName   string   `json:"generic_name" validate:"omitempty,max=200"`
+	BrandName     string   `json:"brand_name" validate:"omitempty,max=200"`
+	Type          string   `json:"type" validate:"required,oneof=tablet capsule syrup injection ointment other"`
+	Strength      string   `json:"strength" validate:"omitempty,max=50"` // e.g., "500mg"
+	Manufacturer  string   `json:"manufacturer" validate:"omitempty,max=100"`
+	Unit          string   `json:"unit" validate:"omitempty,max=20"` // tablet, ml, mg
+	StockQuantity int      `json:"stock_quantity" validate:"required"`
+	Price         *float64 `json:"price" validate:"omitempty"`
+	IsActive      bool     `json:"is_active" validate:"required"`
 }
 
 type UpdateMedicineRequest struct {
-  	Name          string         `json:"name" validate:"omitempty,max=200"`
-	GenericName   string         `json:"generic_name" validate:"omitempty,max=200"`
-	BrandName     string         `json:"brand_name" validate:"omitempty,max=200"`
-	Type          string         `json:"type" validate:"omitempty,oneof=tablet capsule syrup injection ointment other"`
-	Strength      string         `json:"strength" validate:"omitempty,max=50"` // e.g., "500mg"
-	Manufacturer  string         `json:"manufacturer" validate:"omitempty,max=100"`
-	Unit          string         `json:"unit" validate:"omitempty,max=20"` // tablet, ml, mg
-	StockQuantity int            `json:"stock_quantity" validate:"omitempty"`
-	Price         *float64       `json:"price" validate:"omitempty"`
-	IsActive      bool           `json:"is_active" validate:"omitempty"`
+	Name          string   `json:"name" validate:"omitempty,max=200"`
+	GenericName   string   `json:"generic_name" validate:"omitempty,max=200"`
+	BrandName     string   `json:"brand_name" validate:"omitempty,max=200"`
+	Type          string   `json:"type" validate:"omitempty,oneof=tablet capsule syrup injection ointment other"`
+	Strength      string   `json:"strength" validate:"omitempty,max=50"` // e.g., "500mg"
+	Manufacturer  string   `json:"manufacturer" validate:"omitempty,max=100"`
+	Unit          string   `json:"unit" validate:"omitempty,max=20"` // tablet, ml, mg
+	StockQuantity int      `json:"stock_quantity" validate:"omitempty"`
+	Price         *float64 `json:"price" validate:"omitempty"`
+	IsActive      bool     `json:"is_active" validate:"omitempty"`
 }
 
 type ListMedicineQuery struct {
