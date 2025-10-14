@@ -7,7 +7,7 @@ import (
 )
 
 type Doctor struct {
-	ID             uint           `gorm:"primaryKey" json:"id"`
+	ID             uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID         *uint          `gorm:"index" json:"user_id,omitempty" validate:"omitempty"`
 	EmployeeID     string         `gorm:"unique;not null;size:20;index" json:"employee_id" validate:"required,max=20"`
 	FullName       string         `gorm:"not null;size:100" json:"full_name" validate:"required,max=100"`
@@ -22,13 +22,13 @@ type Doctor struct {
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Relations
-	User                  *User              `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
-	Department            *Department        `gorm:"foreignKey:DepartmentID;references:ID" json:"department,omitempty"`
-	MedicalRecords        []MedicalRecord    `gorm:"foreignKey:DoctorID;references:ID" json:"medical_records,omitempty"`
-	Prescriptions         []Prescription     `gorm:"foreignKey:DoctorID;references:ID" json:"prescriptions,omitempty"`
-	LabTests              []LabTest          `gorm:"foreignKey:OrderedByDoctorID;references:ID" json:"lab_tests,omitempty"`
-	Appointments          []Appointment      `gorm:"foreignKey:DoctorID;references:ID" json:"appointments,omitempty"`
-	Hospitalizations      []Hospitalization  `gorm:"foreignKey:AttendingDoctorID;references:ID" json:"hospitalizations,omitempty"`
+	User             *User             `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
+	Department       *Department       `gorm:"foreignKey:DepartmentID;references:ID" json:"department,omitempty"`
+	MedicalRecords   []MedicalRecord   `gorm:"foreignKey:DoctorID;references:ID" json:"medical_records,omitempty"`
+	Prescriptions    []Prescription    `gorm:"foreignKey:DoctorID;references:ID" json:"prescriptions,omitempty"`
+	LabTests         []LabTest         `gorm:"foreignKey:OrderedByDoctorID;references:ID" json:"lab_tests,omitempty"`
+	Appointments     []Appointment     `gorm:"foreignKey:DoctorID;references:ID" json:"appointments,omitempty"`
+	Hospitalizations []Hospitalization `gorm:"foreignKey:AttendingDoctorID;references:ID" json:"hospitalizations,omitempty"`
 }
 
 func (Doctor) TableName() string {

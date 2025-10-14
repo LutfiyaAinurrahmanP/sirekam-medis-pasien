@@ -13,7 +13,7 @@ const (
 )
 
 type Patient struct {
-	ID                    uint           `gorm:"primaryKey" json:"id"`
+	ID                    uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	UserID                *uint          `gorm:"index" json:"user_id,omitempty" validate:"omitempty"`
 	PatientCode           string         `gorm:"unique;not null;size:20;index" json:"patient_code" validate:"required,max=20"`
 	FullName              string         `gorm:"not null;size:100" json:"full_name" validate:"required,max=100"`
@@ -33,11 +33,11 @@ type Patient struct {
 	DeletedAt             gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Relations
-	User             *User              `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
-	MedicalRecords   []MedicalRecord    `gorm:"foreignKey:PatientID;references:ID" json:"medical_records,omitempty"`
-	Appointments     []Appointment      `gorm:"foreignKey:PatientID;references:ID" json:"appointments,omitempty"`
-	Hospitalizations []Hospitalization  `gorm:"foreignKey:PatientID;references:ID" json:"hospitalizations,omitempty"`
-	Billings         []Billing          `gorm:"foreignKey:PatientID;references:ID" json:"billings,omitempty"`
+	User             *User             `gorm:"foreignKey:UserID;references:ID" json:"user,omitempty"`
+	MedicalRecords   []MedicalRecord   `gorm:"foreignKey:PatientID;references:ID" json:"medical_records,omitempty"`
+	Appointments     []Appointment     `gorm:"foreignKey:PatientID;references:ID" json:"appointments,omitempty"`
+	Hospitalizations []Hospitalization `gorm:"foreignKey:PatientID;references:ID" json:"hospitalizations,omitempty"`
+	Billings         []Billing         `gorm:"foreignKey:PatientID;references:ID" json:"billings,omitempty"`
 }
 
 func (Patient) TableName() string {

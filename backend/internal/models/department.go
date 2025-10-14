@@ -7,7 +7,7 @@ import (
 )
 
 type Department struct {
-	ID            uint           `gorm:"primaryKey" json:"id"`
+	ID            uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name          string         `gorm:"not null;size:100;index" json:"name" validate:"required,max=100"`
 	Code          string         `gorm:"unique;not null;size:20;index" json:"code" validate:"required,max=20"`
 	Description   string         `gorm:"type:text" json:"description,omitempty" validate:"omitempty"`

@@ -7,7 +7,7 @@ import (
 )
 
 type TestType struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
+	ID          uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name        string         `gorm:"not null;size:200;index" json:"name" validate:"required,max=200"`
 	Code        string         `gorm:"unique;not null;size:50;index" json:"code" validate:"required,max=50"`
 	Category    string         `gorm:"size:100" json:"category,omitempty" validate:"omitempty,max=100"` // Hematologi, Kimia Darah, etc

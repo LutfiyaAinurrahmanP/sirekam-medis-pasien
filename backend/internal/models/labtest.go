@@ -7,15 +7,15 @@ import (
 )
 
 const (
-	LabTestStatusOrdered          = "ordered"
-	LabTestStatusSampleCollected  = "sample_collected"
-	LabTestStatusInProgress       = "in_progress"
-	LabTestStatusCompleted        = "completed"
-	LabTestStatusCancelled        = "cancelled"
+	LabTestStatusOrdered         = "ordered"
+	LabTestStatusSampleCollected = "sample_collected"
+	LabTestStatusInProgress      = "in_progress"
+	LabTestStatusCompleted       = "completed"
+	LabTestStatusCancelled       = "cancelled"
 )
 
 type LabTest struct {
-	ID                   uint           `gorm:"primaryKey" json:"id"`
+	ID                   uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	MedicalRecordID      uint           `gorm:"not null;index" json:"medical_record_id" validate:"required"`
 	TestTypeID           uint           `gorm:"not null;index" json:"test_type_id" validate:"required"`
 	OrderedByDoctorID    uint           `gorm:"not null;index" json:"ordered_by_doctor_id" validate:"required"`
@@ -32,9 +32,9 @@ type LabTest struct {
 	DeletedAt            gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Relations
-	MedicalRecord     *MedicalRecord `gorm:"foreignKey:MedicalRecordID;references:ID" json:"medical_record,omitempty"`
-	TestType          *TestType      `gorm:"foreignKey:TestTypeID;references:ID" json:"test_type,omitempty"`
-	OrderedByDoctor   *Doctor        `gorm:"foreignKey:OrderedByDoctorID;references:ID" json:"ordered_by_doctor,omitempty"`
+	MedicalRecord   *MedicalRecord `gorm:"foreignKey:MedicalRecordID;references:ID" json:"medical_record,omitempty"`
+	TestType        *TestType      `gorm:"foreignKey:TestTypeID;references:ID" json:"test_type,omitempty"`
+	OrderedByDoctor *Doctor        `gorm:"foreignKey:OrderedByDoctorID;references:ID" json:"ordered_by_doctor,omitempty"`
 }
 
 func (LabTest) TableName() string {

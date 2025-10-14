@@ -13,22 +13,22 @@ const (
 )
 
 type MedicalRecord struct {
-	ID            uint           `gorm:"primaryKey" json:"id"`
-	PatientID     uint           `gorm:"not null;index" json:"patient_id" validate:"required"`
-	DoctorID      uint           `gorm:"not null;index" json:"doctor_id" validate:"required"`
-	VisitDate     time.Time      `gorm:"not null;type:date;index" json:"visit_date" validate:"required"`
-	VisitTime     string         `gorm:"not null;type:time" json:"visit_time" validate:"required"`
-	ChiefComplaint string        `gorm:"not null;type:text" json:"chief_complaint" validate:"required"`
-	Symptoms      string         `gorm:"type:text" json:"symptoms,omitempty" validate:"omitempty"`
-	Diagnosis     string         `gorm:"not null;type:text" json:"diagnosis" validate:"required"`
-	DiagnosisCode string         `gorm:"size:20" json:"diagnosis_code,omitempty" validate:"omitempty,max=20"` // ICD-10
-	TreatmentPlan string         `gorm:"type:text" json:"treatment_plan,omitempty" validate:"omitempty"`
-	Notes         string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
-	NextVisitDate *time.Time     `gorm:"type:date" json:"next_visit_date,omitempty" validate:"omitempty"`
-	Status        string         `gorm:"type:enum('draft','completed','archived');not null;default:'draft';index" json:"status" validate:"required"`
-	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt     time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`
+	ID             uint           `gorm:"primaryKey;autoIncrement" json:"id"`
+	PatientID      uint           `gorm:"not null;index" json:"patient_id" validate:"required"`
+	DoctorID       uint           `gorm:"not null;index" json:"doctor_id" validate:"required"`
+	VisitDate      time.Time      `gorm:"not null;type:date;index" json:"visit_date" validate:"required"`
+	VisitTime      string         `gorm:"not null;type:time" json:"visit_time" validate:"required"`
+	ChiefComplaint string         `gorm:"not null;type:text" json:"chief_complaint" validate:"required"`
+	Symptoms       string         `gorm:"type:text" json:"symptoms,omitempty" validate:"omitempty"`
+	Diagnosis      string         `gorm:"not null;type:text" json:"diagnosis" validate:"required"`
+	DiagnosisCode  string         `gorm:"size:20" json:"diagnosis_code,omitempty" validate:"omitempty,max=20"` // ICD-10
+	TreatmentPlan  string         `gorm:"type:text" json:"treatment_plan,omitempty" validate:"omitempty"`
+	Notes          string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
+	NextVisitDate  *time.Time     `gorm:"type:date" json:"next_visit_date,omitempty" validate:"omitempty"`
+	Status         string         `gorm:"type:enum('draft','completed','archived');not null;default:'draft';index" json:"status" validate:"required"`
+	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt      time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
+	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Relations
 	Patient       *Patient       `gorm:"foreignKey:PatientID;references:ID" json:"patient,omitempty"`

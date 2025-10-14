@@ -7,13 +7,13 @@ import (
 )
 
 type VitalSign struct {
-	ID                     uint           `gorm:"primaryKey" json:"id"`
+	ID                     uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	MedicalRecordID        uint           `gorm:"not null;index;unique" json:"medical_record_id" validate:"required"`
 	BloodPressureSystolic  *int           `gorm:"" json:"blood_pressure_systolic,omitempty"`
 	BloodPressureDiastolic *int           `gorm:"" json:"blood_pressure_diastolic,omitempty"`
-	HeartRate              *int           `gorm:"" json:"heart_rate,omitempty"` // bpm
-	Temperature            *float64       `gorm:"type:decimal(4,2)" json:"temperature,omitempty"` // Celsius
-	RespiratoryRate        *int           `gorm:"" json:"respiratory_rate,omitempty"` // per minute
+	HeartRate              *int           `gorm:"" json:"heart_rate,omitempty"`                         // bpm
+	Temperature            *float64       `gorm:"type:decimal(4,2)" json:"temperature,omitempty"`       // Celsius
+	RespiratoryRate        *int           `gorm:"" json:"respiratory_rate,omitempty"`                   // per minute
 	OxygenSaturation       *float64       `gorm:"type:decimal(5,2)" json:"oxygen_saturation,omitempty"` // percentage
 	WeightKg               *float64       `gorm:"type:decimal(5,2)" json:"weight_kg,omitempty"`
 	HeightCm               *float64       `gorm:"type:decimal(5,2)" json:"height_cm,omitempty"`

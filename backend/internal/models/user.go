@@ -7,20 +7,20 @@ import (
 )
 
 const (
-	RoleUser       = "user"
-	RoleAdmin      = "admin"
-	RoleDoctor     = "doctor"
-	RoleNurse      = "nurse"
-	RolePharmacist = "pharmacist"
-	RoleLabTech    = "lab_technician"
+	RoleUser         = "user"
+	RoleAdmin        = "admin"
+	RoleDoctor       = "doctor"
+	RoleNurse        = "nurse"
+	RolePharmacist   = "pharmacist"
+	RoleLabTech      = "lab_technician"
 	RoleReceptionist = "receptionist"
-	RoleCashier    = "cashier"
-	RoleHeadDept   = "head_department"
-	RoleDirector   = "director"
+	RoleCashier      = "cashier"
+	RoleHeadDept     = "head_department"
+	RoleDirector     = "director"
 )
 
 type User struct {
-	ID        uint           `gorm:"primaryKey" json:"id"`
+	ID        uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	Username  string         `gorm:"unique;not null;size:50" json:"username" validate:"required,min=3,max=50"`
 	Email     string         `gorm:"unique;not null;size:100" json:"email" validate:"required,email"`
 	Phone     string         `gorm:"unique;not null;size:15" json:"phone" validate:"required,min=10,max=15"`

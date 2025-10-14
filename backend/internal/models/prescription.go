@@ -13,7 +13,7 @@ const (
 )
 
 type Prescription struct {
-	ID               uint           `gorm:"primaryKey" json:"id"`
+	ID               uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	MedicalRecordID  uint           `gorm:"not null;index" json:"medical_record_id" validate:"required"`
 	DoctorID         uint           `gorm:"not null;index" json:"doctor_id" validate:"required"`
 	PrescriptionDate time.Time      `gorm:"not null;type:date;index" json:"prescription_date" validate:"required"`

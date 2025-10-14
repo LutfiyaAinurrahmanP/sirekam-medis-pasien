@@ -23,7 +23,7 @@ const (
 )
 
 type Billing struct {
-	ID              uint           `gorm:"primaryKey" json:"id"`
+	ID              uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	PatientID       uint           `gorm:"not null;index" json:"patient_id" validate:"required"`
 	MedicalRecordID *uint          `gorm:"index" json:"medical_record_id,omitempty" validate:"omitempty"`
 	InvoiceNumber   string         `gorm:"unique;not null;size:50;index" json:"invoice_number" validate:"required,max=50"`
@@ -86,7 +86,7 @@ func (b *Billing) AddPayment(amount float64) {
 
 func (b *Billing) UpdatePaymentStatus() {
 	netAmount := b.GetNetAmount()
-	
+
 	if b.PaidAmount >= netAmount {
 		b.PaymentStatus = PaymentStatusPaid
 		now := time.Now()

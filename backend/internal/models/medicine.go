@@ -16,7 +16,7 @@ const (
 )
 
 type Medicine struct {
-	ID            uint           `gorm:"primaryKey" json:"id"`
+	ID            uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name          string         `gorm:"not null;size:200;index" json:"name" validate:"required,max=200"`
 	GenericName   string         `gorm:"size:200" json:"generic_name,omitempty" validate:"omitempty,max=200"`
 	BrandName     string         `gorm:"size:200" json:"brand_name,omitempty" validate:"omitempty,max=200"`

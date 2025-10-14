@@ -13,7 +13,7 @@ const (
 )
 
 type Hospitalization struct {
-	ID                uint           `gorm:"primaryKey" json:"id"`
+	ID                uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	PatientID         uint           `gorm:"not null;index" json:"patient_id" validate:"required"`
 	MedicalRecordID   uint           `gorm:"not null;index" json:"medical_record_id" validate:"required"`
 	AdmissionDate     time.Time      `gorm:"not null;type:datetime;index" json:"admission_date" validate:"required"`
