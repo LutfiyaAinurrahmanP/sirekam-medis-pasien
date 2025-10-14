@@ -25,7 +25,7 @@ type User struct {
 	Email     string         `gorm:"unique;not null;size:100" json:"email" validate:"required,email"`
 	Phone     string         `gorm:"unique;not null;size:15" json:"phone" validate:"required,min=10,max=15"`
 	Password  string         `gorm:"not null;size:255" json:"password" validate:"required,min=8"`
-	Role      string         `gorm:"type:varchar(20);not null;default:'user';index" json:"role"`
+	Role      string         `gorm:"type:varchar(20);not null;default:'user';index" json:"role" validate:"required"`
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`

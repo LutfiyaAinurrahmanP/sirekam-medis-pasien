@@ -8,15 +8,15 @@ import (
 
 type Doctor struct {
 	ID             uint           `gorm:"primaryKey" json:"id"`
-	UserID         *uint          `gorm:"index" json:"user_id,omitempty"`
-	EmployeeID     string         `gorm:"unique;not null;size:20;index" json:"employee_id" validate:"required"`
-	FullName       string         `gorm:"not null;size:100" json:"full_name" validate:"required"`
-	Specialization string         `gorm:"not null;size:100" json:"specialization" validate:"required"`
-	LicenseNumber  string         `gorm:"unique;not null;size:50" json:"license_number" validate:"required"`
-	Phone          string         `gorm:"size:15" json:"phone,omitempty"`
-	Email          string         `gorm:"size:100" json:"email,omitempty" validate:"omitempty,email"`
-	DepartmentID   *uint          `gorm:"index" json:"department_id,omitempty"`
-	IsActive       bool           `gorm:"not null;default:true;index" json:"is_active"`
+	UserID         *uint          `gorm:"index" json:"user_id,omitempty" validate:"omitempty"`
+	EmployeeID     string         `gorm:"unique;not null;size:20;index" json:"employee_id" validate:"required,max=20"`
+	FullName       string         `gorm:"not null;size:100" json:"full_name" validate:"required,max=100"`
+	Specialization string         `gorm:"not null;size:100" json:"specialization" validate:"required,max=100"`
+	LicenseNumber  string         `gorm:"unique;not null;size:50" json:"license_number" validate:"required,max=50"`
+	Phone          string         `gorm:"size:15" json:"phone,omitempty" validate:"omitempty,max=15"`
+	Email          string         `gorm:"size:100" json:"email,omitempty" validate:"omitempty,email,max=100"`
+	DepartmentID   *uint          `gorm:"index" json:"department_id,omitempty" validate:"omitempty"`
+	IsActive       bool           `gorm:"not null;default:true;index" json:"is_active" validate:"required"`
 	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt      time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`

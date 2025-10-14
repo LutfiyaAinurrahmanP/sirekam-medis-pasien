@@ -20,13 +20,13 @@ type LabTest struct {
 	TestTypeID           uint           `gorm:"not null;index" json:"test_type_id" validate:"required"`
 	OrderedByDoctorID    uint           `gorm:"not null;index" json:"ordered_by_doctor_id" validate:"required"`
 	OrderDate            time.Time      `gorm:"not null;type:date;index" json:"order_date" validate:"required"`
-	SampleCollectionDate *time.Time     `gorm:"type:datetime" json:"sample_collection_date,omitempty"`
-	ResultDate           *time.Time     `gorm:"type:datetime" json:"result_date,omitempty"`
-	ResultValue          string         `gorm:"type:text" json:"result_value,omitempty"`
-	ResultUnit           string         `gorm:"size:50" json:"result_unit,omitempty"`
-	ReferenceRange       string         `gorm:"size:100" json:"reference_range,omitempty"`
-	Status               string         `gorm:"type:enum('ordered','sample_collected','in_progress','completed','cancelled');not null;default:'ordered';index" json:"status"`
-	Notes                string         `gorm:"type:text" json:"notes,omitempty"`
+	SampleCollectionDate *time.Time     `gorm:"type:datetime" json:"sample_collection_date,omitempty" validate:"omitempty"`
+	ResultDate           *time.Time     `gorm:"type:datetime" json:"result_date,omitempty" validate:"omitempty"`
+	ResultValue          string         `gorm:"type:text" json:"result_value,omitempty" validate:"omitempty"`
+	ResultUnit           string         `gorm:"size:50" json:"result_unit,omitempty" validate:"omitempty,max=50"`
+	ReferenceRange       string         `gorm:"size:100" json:"reference_range,omitempty" validate:"omitempty,max=100"`
+	Status               string         `gorm:"type:enum('ordered','sample_collected','in_progress','completed','cancelled');not null;default:'ordered';index" json:"status" validate:"required"`
+	Notes                string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
 	CreatedAt            time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt            time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt            gorm.DeletedAt `gorm:"index" json:"-"`

@@ -8,10 +8,10 @@ import (
 
 type Department struct {
 	ID            uint           `gorm:"primaryKey" json:"id"`
-	Name          string         `gorm:"not null;size:100;index" json:"name" validate:"required"`
-	Code          string         `gorm:"unique;not null;size:20;index" json:"code" validate:"required"`
-	Description   string         `gorm:"type:text" json:"description,omitempty"`
-	FloorLocation string         `gorm:"size:50" json:"floor_location,omitempty"`
+	Name          string         `gorm:"not null;size:100;index" json:"name" validate:"required,max=100"`
+	Code          string         `gorm:"unique;not null;size:20;index" json:"code" validate:"required,max=20"`
+	Description   string         `gorm:"type:text" json:"description,omitempty" validate:"omitempty"`
+	FloorLocation string         `gorm:"size:50" json:"floor_location,omitempty" validate:"omitempty,max=50"`
 	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt     time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`

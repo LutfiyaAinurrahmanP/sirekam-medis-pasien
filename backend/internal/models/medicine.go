@@ -17,16 +17,16 @@ const (
 
 type Medicine struct {
 	ID            uint           `gorm:"primaryKey" json:"id"`
-	Name          string         `gorm:"not null;size:200;index" json:"name" validate:"required"`
-	GenericName   string         `gorm:"size:200" json:"generic_name,omitempty"`
-	BrandName     string         `gorm:"size:200" json:"brand_name,omitempty"`
+	Name          string         `gorm:"not null;size:200;index" json:"name" validate:"required,max=200"`
+	GenericName   string         `gorm:"size:200" json:"generic_name,omitempty" validate:"omitempty,max=200"`
+	BrandName     string         `gorm:"size:200" json:"brand_name,omitempty" validate:"omitempty,max=200"`
 	Type          string         `gorm:"type:enum('tablet','capsule','syrup','injection','ointment','other');not null" json:"type" validate:"required"`
-	Strength      string         `gorm:"size:50" json:"strength,omitempty"` // e.g., "500mg"
-	Manufacturer  string         `gorm:"size:100" json:"manufacturer,omitempty"`
-	Unit          string         `gorm:"size:20" json:"unit,omitempty"` // tablet, ml, mg
-	StockQuantity int            `gorm:"not null;default:0" json:"stock_quantity"`
-	Price         *float64       `gorm:"type:decimal(10,2)" json:"price,omitempty"`
-	IsActive      bool           `gorm:"not null;default:true;index" json:"is_active"`
+	Strength      string         `gorm:"size:50" json:"strength,omitempty" validate:"omitempty,max=50"` // e.g., "500mg"
+	Manufacturer  string         `gorm:"size:100" json:"manufacturer,omitempty" validate:"omitempty,max=100"`
+	Unit          string         `gorm:"size:20" json:"unit,omitempty" validate:"omitempty,max=20"` // tablet, ml, mg
+	StockQuantity int            `gorm:"not null;default:0" json:"stock_quantity" validate:"required"`
+	Price         *float64       `gorm:"type:decimal(10,2)" json:"price,omitempty" validate:"omitempty"`
+	IsActive      bool           `gorm:"not null;default:true;index" json:"is_active" validate:"required"`
 	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt     time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`

@@ -17,13 +17,13 @@ const (
 
 type Room struct {
 	ID            uint           `gorm:"primaryKey" json:"id"`
-	RoomNumber    string         `gorm:"unique;not null;size:20;index" json:"room_number" validate:"required"`
+	RoomNumber    string         `gorm:"unique;not null;size:20;index" json:"room_number" validate:"required,max=20"`
 	RoomType      string         `gorm:"type:enum('vip','class_1','class_2','class_3','icu','emergency');not null;index" json:"room_type" validate:"required"`
-	DepartmentID  *uint          `gorm:"index" json:"department_id,omitempty"`
+	DepartmentID  *uint          `gorm:"index" json:"department_id,omitempty" validate:"omitempty"`
 	BedCapacity   int            `gorm:"not null" json:"bed_capacity" validate:"required,min=1"`
-	AvailableBeds int            `gorm:"not null" json:"available_beds"`
-	PricePerDay   *float64       `gorm:"type:decimal(10,2)" json:"price_per_day,omitempty"`
-	IsActive      bool           `gorm:"not null;default:true;index" json:"is_active"`
+	AvailableBeds int            `gorm:"not null" json:"available_beds" validate:"required"`
+	PricePerDay   *float64       `gorm:"type:decimal(10,2)" json:"price_per_day,omitempty" validate:"omitempty"`
+	IsActive      bool           `gorm:"not null;default:true;index" json:"is_active" validate:"required"`
 	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt     time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`

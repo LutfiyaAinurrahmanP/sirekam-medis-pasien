@@ -17,12 +17,12 @@ type Hospitalization struct {
 	PatientID         uint           `gorm:"not null;index" json:"patient_id" validate:"required"`
 	MedicalRecordID   uint           `gorm:"not null;index" json:"medical_record_id" validate:"required"`
 	AdmissionDate     time.Time      `gorm:"not null;type:datetime;index" json:"admission_date" validate:"required"`
-	DischargeDate     *time.Time     `gorm:"type:datetime" json:"discharge_date,omitempty"`
+	DischargeDate     *time.Time     `gorm:"type:datetime" json:"discharge_date,omitempty" validate:"omitempty"`
 	RoomID            uint           `gorm:"not null;index" json:"room_id" validate:"required"`
 	AttendingDoctorID uint           `gorm:"not null;index" json:"attending_doctor_id" validate:"required"`
 	AdmissionReason   string         `gorm:"not null;type:text" json:"admission_reason" validate:"required"`
-	DischargeSummary  string         `gorm:"type:text" json:"discharge_summary,omitempty"`
-	Status            string         `gorm:"type:enum('admitted','discharged','transferred');not null;default:'admitted';index" json:"status"`
+	DischargeSummary  string         `gorm:"type:text" json:"discharge_summary,omitempty" validate:"omitempty"`
+	Status            string         `gorm:"type:enum('admitted','discharged','transferred');not null;default:'admitted';index" json:"status" validate:"required"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt         time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`

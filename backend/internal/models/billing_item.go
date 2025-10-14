@@ -19,7 +19,7 @@ type BillingItem struct {
 	ID              uint           `gorm:"primaryKey" json:"id"`
 	BillingID       uint           `gorm:"not null;index" json:"billing_id" validate:"required"`
 	ItemType        string         `gorm:"type:enum('consultation','medicine','lab_test','procedure','room','other');not null;index" json:"item_type" validate:"required"`
-	ItemDescription string         `gorm:"not null;size:255" json:"item_description" validate:"required"`
+	ItemDescription string         `gorm:"not null;size:255" json:"item_description" validate:"required,max=255"`
 	Quantity        int            `gorm:"not null" json:"quantity" validate:"required,min=1"`
 	UnitPrice       float64        `gorm:"not null;type:decimal(10,2)" json:"unit_price" validate:"required,min=0"`
 	TotalPrice      float64        `gorm:"not null;type:decimal(10,2)" json:"total_price" validate:"required,min=0"`
