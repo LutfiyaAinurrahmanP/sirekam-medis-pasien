@@ -7,8 +7,16 @@ import (
 )
 
 const (
-	RoleUser  = "user"
-	RoleAdmin = "admin"
+	RoleUser       = "user"
+	RoleAdmin      = "admin"
+	RoleDoctor     = "doctor"
+	RoleNurse      = "nurse"
+	RolePharmacist = "pharmacist"
+	RoleLabTech    = "lab_technician"
+	RoleReceptionist = "receptionist"
+	RoleCashier    = "cashier"
+	RoleHeadDept   = "head_department"
+	RoleDirector   = "director"
 )
 
 type User struct {
@@ -21,6 +29,10 @@ type User struct {
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+
+	// Relations
+	Patient *Patient `gorm:"foreignKey:UserID;references:ID" json:"patient,omitempty"`
+	Doctor  *Doctor  `gorm:"foreignKey:UserID;references:ID" json:"doctor,omitempty"`
 }
 
 func (User) TableName() string {
@@ -50,10 +62,59 @@ func (u *User) IsUser() bool {
 	return u.Role == RoleUser
 }
 
+func (u *User) IsDoctor() bool {
+	return u.Role == RoleDoctor
+}
+
+func (u *User) IsNurse() bool {
+	return u.Role == RoleNurse
+}
+
+func (u *User) IsPharmacist() bool {
+	return u.Role == RolePharmacist
+}
+
+func (u *User) IsLabTech() bool {
+	return u.Role == RoleLabTech
+}
+
+func (u *User) IsReceptionist() bool {
+	return u.Role == RoleReceptionist
+}
+
+func (u *User) IsCashier() bool {
+	return u.Role == RoleCashier
+}
+
+func (u *User) IsHeadDept() bool {
+	return u.Role == RoleHeadDept
+}
+
+func (u *User) IsDirector() bool {
+	return u.Role == RoleDirector
+}
+
 func ValidateRole(role string) bool {
-	return role == RoleUser || role == RoleAdmin
+	validRoles := GetAvailableRoles()
+	for _, r := range validRoles {
+		if r == role {
+			return true
+		}
+	}
+	return false
 }
 
 func GetAvailableRoles() []string {
-	return []string{RoleUser, RoleAdmin}
+	return []string{
+		RoleUser,
+		RoleAdmin,
+		RoleDoctor,
+		RoleNurse,
+		RolePharmacist,
+		RoleLabTech,
+		RoleReceptionist,
+		RoleCashier,
+		RoleHeadDept,
+		RoleDirector,
+	}
 }
