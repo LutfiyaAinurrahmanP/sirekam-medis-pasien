@@ -18,7 +18,7 @@ const (
 type Room struct {
 	ID            uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	RoomNumber    string         `gorm:"unique;not null;size:20;index" json:"room_number" validate:"required,max=20"`
-	RoomType      string         `gorm:"type:enum('vip','class_1','class_2','class_3','icu','emergency');not null;index" json:"room_type" validate:"required"`
+	RoomType      string         `gorm:"type:enum('vip','class_1','class_2','class_3','icu','emergency');not null;index" json:"room_type" validate:"required,oneof=vip class_1 class_2 class_3 icu emergency"`
 	DepartmentID  *uint          `gorm:"index" json:"department_id,omitempty" validate:"omitempty"`
 	BedCapacity   int            `gorm:"not null" json:"bed_capacity" validate:"required,min=1"`
 	AvailableBeds int            `gorm:"not null" json:"available_beds" validate:"required"`

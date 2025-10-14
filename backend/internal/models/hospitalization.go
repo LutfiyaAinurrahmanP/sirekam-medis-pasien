@@ -22,7 +22,7 @@ type Hospitalization struct {
 	AttendingDoctorID uint           `gorm:"not null;index" json:"attending_doctor_id" validate:"required"`
 	AdmissionReason   string         `gorm:"not null;type:text" json:"admission_reason" validate:"required"`
 	DischargeSummary  string         `gorm:"type:text" json:"discharge_summary,omitempty" validate:"omitempty"`
-	Status            string         `gorm:"type:enum('admitted','discharged','transferred');not null;default:'admitted';index" json:"status" validate:"required"`
+	Status            string         `gorm:"type:enum('admitted','discharged','transferred');not null;default:'admitted';index" json:"status" validate:"required,oneof=admitted discharged transferred"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt         time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`

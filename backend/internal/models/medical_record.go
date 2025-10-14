@@ -25,7 +25,7 @@ type MedicalRecord struct {
 	TreatmentPlan  string         `gorm:"type:text" json:"treatment_plan,omitempty" validate:"omitempty"`
 	Notes          string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
 	NextVisitDate  *time.Time     `gorm:"type:date" json:"next_visit_date,omitempty" validate:"omitempty"`
-	Status         string         `gorm:"type:enum('draft','completed','archived');not null;default:'draft';index" json:"status" validate:"required"`
+	Status         string         `gorm:"type:enum('draft','completed','archived');not null;default:'draft';index" json:"status" validate:"required,oneof=draft completed archived"`
 	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt      time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`

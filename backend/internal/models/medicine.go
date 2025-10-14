@@ -20,7 +20,7 @@ type Medicine struct {
 	Name          string         `gorm:"not null;size:200;index" json:"name" validate:"required,max=200"`
 	GenericName   string         `gorm:"size:200" json:"generic_name,omitempty" validate:"omitempty,max=200"`
 	BrandName     string         `gorm:"size:200" json:"brand_name,omitempty" validate:"omitempty,max=200"`
-	Type          string         `gorm:"type:enum('tablet','capsule','syrup','injection','ointment','other');not null" json:"type" validate:"required"`
+	Type          string         `gorm:"type:enum('tablet','capsule','syrup','injection','ointment','other');not null" json:"type" validate:"required,oneof=tablet capsule syrup injection ointment other"`
 	Strength      string         `gorm:"size:50" json:"strength,omitempty" validate:"omitempty,max=50"` // e.g., "500mg"
 	Manufacturer  string         `gorm:"size:100" json:"manufacturer,omitempty" validate:"omitempty,max=100"`
 	Unit          string         `gorm:"size:20" json:"unit,omitempty" validate:"omitempty,max=20"` // tablet, ml, mg

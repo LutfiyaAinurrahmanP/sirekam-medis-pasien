@@ -33,7 +33,7 @@ type ListUserQuery struct {
 	Limit  int    `query:"limit" validate:"omitempty,min=1,max=100"`
 	Search string `query:"search" validate:"omitempty,max=100"`
 	Role   string `query:"role" validate:"omitempty,oneof=user admin"`
-	Sort   string `query:"sort" validate:"omitempty,oneof=asc dsc"`
+	Sort   string `query:"sort" validate:"omitempty,oneof=asc desc"`
 	SortBy string `query:"sort_by" validate:"omitempty,oneof=id username email created_at"`
 }
 

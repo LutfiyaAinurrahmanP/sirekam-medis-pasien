@@ -23,7 +23,7 @@ type Appointment struct {
 	AppointmentTime string         `gorm:"not null;type:time" json:"appointment_time" validate:"required"` // HH:MM:SS
 	DurationMinutes int            `gorm:"not null" json:"duration_minutes" validate:"required,min=1"`
 	Reason          string         `gorm:"type:text" json:"reason,omitempty" validate:"omitempty"`
-	Status          string         `gorm:"type:enum('scheduled','confirmed','in_progress','completed','cancelled','no_show');not null;default:'scheduled';index" json:"status" validate:"required"`
+	Status          string         `gorm:"type:enum('scheduled','confirmed','in_progress','completed','cancelled','no_show');not null;default:'scheduled';index" json:"status" validate:"required,oneof=scheduled confirmed in_progress completed cancelled no_show"`
 	Notes           string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
 	CreatedAt       time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt       time.Time      `gorm:"autoUpdateTime" json:"updated_at"`

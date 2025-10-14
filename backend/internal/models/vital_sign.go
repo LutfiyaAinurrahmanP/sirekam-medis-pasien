@@ -9,15 +9,15 @@ import (
 type VitalSign struct {
 	ID                     uint           `gorm:"primaryKey;autoIncrement" json:"id"`
 	MedicalRecordID        uint           `gorm:"not null;index;unique" json:"medical_record_id" validate:"required"`
-	BloodPressureSystolic  *int           `gorm:"" json:"blood_pressure_systolic,omitempty"`
-	BloodPressureDiastolic *int           `gorm:"" json:"blood_pressure_diastolic,omitempty"`
-	HeartRate              *int           `gorm:"" json:"heart_rate,omitempty"`                         // bpm
-	Temperature            *float64       `gorm:"type:decimal(4,2)" json:"temperature,omitempty"`       // Celsius
-	RespiratoryRate        *int           `gorm:"" json:"respiratory_rate,omitempty"`                   // per minute
-	OxygenSaturation       *float64       `gorm:"type:decimal(5,2)" json:"oxygen_saturation,omitempty"` // percentage
-	WeightKg               *float64       `gorm:"type:decimal(5,2)" json:"weight_kg,omitempty"`
-	HeightCm               *float64       `gorm:"type:decimal(5,2)" json:"height_cm,omitempty"`
-	BMI                    *float64       `gorm:"type:decimal(5,2)" json:"bmi,omitempty"`
+	BloodPressureSystolic  *int           `gorm:"" json:"blood_pressure_systolic,omitempty" validate:"omitempty"`
+	BloodPressureDiastolic *int           `gorm:"" json:"blood_pressure_diastolic,omitempty" validate:"omitempty"`
+	HeartRate              *int           `gorm:"" json:"heart_rate,omitempty" validate:"omitempty"`                         // bpm
+	Temperature            *float64       `gorm:"type:decimal(4,2)" json:"temperature,omitempty" validate:"omitempty"`       // Celsius
+	RespiratoryRate        *int           `gorm:"" json:"respiratory_rate,omitempty" validate:"omitempty"`                   // per minute
+	OxygenSaturation       *float64       `gorm:"type:decimal(5,2)" json:"oxygen_saturation,omitempty" validate:"omitempty"` // percentage
+	WeightKg               *float64       `gorm:"type:decimal(5,2)" json:"weight_kg,omitempty" validate:"omitempty"`
+	HeightCm               *float64       `gorm:"type:decimal(5,2)" json:"height_cm,omitempty" validate:"omitempty"`
+	BMI                    *float64       `gorm:"type:decimal(5,2)" json:"bmi,omitempty" validate:"omitempty"`
 	RecordedAt             time.Time      `gorm:"not null;index" json:"recorded_at" validate:"required"`
 	CreatedAt              time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt              time.Time      `gorm:"autoUpdateTime" json:"updated_at"`

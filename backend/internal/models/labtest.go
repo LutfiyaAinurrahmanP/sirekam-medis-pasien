@@ -25,7 +25,7 @@ type LabTest struct {
 	ResultValue          string         `gorm:"type:text" json:"result_value,omitempty" validate:"omitempty"`
 	ResultUnit           string         `gorm:"size:50" json:"result_unit,omitempty" validate:"omitempty,max=50"`
 	ReferenceRange       string         `gorm:"size:100" json:"reference_range,omitempty" validate:"omitempty,max=100"`
-	Status               string         `gorm:"type:enum('ordered','sample_collected','in_progress','completed','cancelled');not null;default:'ordered';index" json:"status" validate:"required"`
+	Status               string         `gorm:"type:enum('ordered','sample_collected','in_progress','completed','cancelled');not null;default:'ordered';index" json:"status" validate:"required,oneof=ordered sample_collected in_progress completed cancelled"`
 	Notes                string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
 	CreatedAt            time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt            time.Time      `gorm:"autoUpdateTime" json:"updated_at"`

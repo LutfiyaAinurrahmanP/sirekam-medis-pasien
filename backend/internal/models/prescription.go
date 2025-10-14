@@ -18,7 +18,7 @@ type Prescription struct {
 	DoctorID         uint           `gorm:"not null;index" json:"doctor_id" validate:"required"`
 	PrescriptionDate time.Time      `gorm:"not null;type:date;index" json:"prescription_date" validate:"required"`
 	Notes            string         `gorm:"type:text" json:"notes,omitempty" validate:"omitempty"`
-	Status           string         `gorm:"type:enum('pending','dispensed','cancelled');not null;default:'pending';index" json:"status" validate:"required"`
+	Status           string         `gorm:"type:enum('pending','dispensed','cancelled');not null;default:'pending';index" json:"status" validate:"required,oneof=pending dispensed cancelled"`
 	CreatedAt        time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt        time.Time      `gorm:"autoUpdateTime" json:"updated_at"`
 	DeletedAt        gorm.DeletedAt `gorm:"index" json:"-"`
