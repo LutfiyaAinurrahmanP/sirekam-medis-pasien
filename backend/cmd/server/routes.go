@@ -8,10 +8,11 @@ import (
 )
 
 type RouteConfig struct {
-	AuthHandler *handlers.AuthHandler
-	UserHandler *handlers.UserHandler
-	JWTSecret   string
-	TokenRepo   repositories.TokenRepository
+	AuthHandler        *handlers.AuthHandler
+	UserHandler        *handlers.UserHandler
+	AppointmentHandler *handlers.AppointmentHandler
+	JWTSecret          string
+	TokenRepo          repositories.TokenRepository
 }
 
 // SetupRoutes mendaftarkan semua routes ke Fiber app
@@ -83,6 +84,11 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 				},
 			})
 		})
+
+		appointment := admin.Group("/appointment")
+		{
+			appointment.Post("/create", config.AppointmentHandler.CreateAppointment)
+		}
 
 		// User Management Routes (Admin)
 		// Prefix: /admin/user

@@ -43,6 +43,9 @@ func main() {
 	modelsToMigrate := []interface{}{
 		&models.User{},           // Model User dengan field role
 		&models.TokenBlacklist{}, // Token blacklist untuk logout
+		&models.Appointment{},
+		&models.Doctor{},
+		&models.Patient{},
 	}
 
 	if err := migrator.RunMigrations(modelsToMigrate...); err != nil {
@@ -57,14 +60,17 @@ func main() {
 	// Repository Layer
 	userRepo := repositories.NewUserRepository(db)
 	tokenRepo := repositories.NewTokenRepository(db)
+	appointmentRepo := repositories.NewAppointmentRepository(db)
 
 	// Service Layer
 	authService := services.NewAuthService(userRepo, tokenRepo, cfg.JWTSecret)
 	userService := services.NewUserService(userRepo)
+	appointmentService := services.NewAppointmentService(appointmentRepo)
 
 	// Handler Layer
 	authHandler := handlers.NewAuthHandler(authService)
 	userHandler := handlers.NewUserHandler(userService)
+	appointmentHandler := handlers.NewAppointmentHandler(appointmentService)
 
 	log.Println("✅ Dependencies initialized successfully")
 
@@ -123,10 +129,11 @@ func main() {
 	log.Println("🔧 Registering application routes...")
 
 	routeConfig := &RouteConfig{
-		AuthHandler: authHandler,
-		UserHandler: userHandler,
-		JWTSecret:   cfg.JWTSecret,
-		TokenRepo:   tokenRepo,
+		AuthHandler:        authHandler,
+		UserHandler:        userHandler,
+		AppointmentHandler: appointmentHandler,
+		JWTSecret:          cfg.JWTSecret,
+		TokenRepo:          tokenRepo,
 	}
 
 	SetupRoutes(app, routeConfig)

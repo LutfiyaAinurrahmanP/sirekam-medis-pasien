@@ -32,90 +32,90 @@ func NewAppointmentRepository(db *gorm.DB) AppointmentRepository {
 }
 
 func (r *appointmentRepository) Create(appointment *models.Appointment) error {
-        return r.db.Create(appointment).Error
+	return r.db.Create(appointment).Error
 }
 
 func (r *appointmentRepository) Update(apppointment *models.Appointment) error {
-        return r.db.Save(apppointment).Error
+	return r.db.Save(apppointment).Error
 }
 
 func (r *appointmentRepository) Delete(id uint) error {
-        return r.db.Delete(&models.Appointment{}, id).Error
+	return r.db.Delete(&models.Appointment{}, id).Error
 }
 
 func (r *appointmentRepository) HardDelete(id uint) error {
-        return r.db.Unscoped().Delete(&models.Appointment{}, id).Error
+	return r.db.Unscoped().Delete(&models.Appointment{}, id).Error
 }
 
 func (r *appointmentRepository) Restore(id uint) error {
-        return r.db.Model(&models.Appointment{}).Unscoped().Where("id = ?", id).Update("deleted_at", nil).Error
+	return r.db.Model(&models.Appointment{}).Unscoped().Where("id = ?", id).Update("deleted_at", nil).Error
 }
 
 func (r *appointmentRepository) FindById(id uint) (*models.Appointment, error) {
-        var appointment models.Appointment
-		err := r.db.First(&appointment, id).Error
-		if err != nil {
-			return nil, err
-		}
-		return &appointment, nil
+	var appointment models.Appointment
+	err := r.db.First(&appointment, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &appointment, nil
 }
 
 func (r *appointmentRepository) FindAll(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error) {
-        var appointments []models.Appointment
-		var total int64
+	var appointments []models.Appointment
+	var total int64
 
-		db := r.db.Model(&models.Appointment{})
+	db := r.db.Model(&models.Appointment{})
 
-		if query.Search != "" {
-			searchPattern := "%" + strings.ToLower(query.Search) + "%"
-			db = db.Where(
-				"LOWER(appointment_date) LIKE ? OR LOWER(status) LIKE ?",
-				searchPattern, searchPattern,
-			)
-		}
+	if query.Search != "" {
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
+		db = db.Where(
+			"LOWER(appointment_date) LIKE ? OR LOWER(status) LIKE ?",
+			searchPattern, searchPattern,
+		)
+	}
 
-		if err := db.Count(&total).Error; err != nil {
-			return nil, 0, fmt.Errorf("failed to count appointment: %w", err)
-		}
+	if err := db.Count(&total).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to count appointment: %w", err)
+	}
 
-		orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
-		db = db.Order(orderClause)
+	orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
+	db = db.Order(orderClause)
 
-		db = db.Limit(query.Limit).Offset(query.GetAppointmentOffSet())
+	db = db.Limit(query.Limit).Offset(query.GetAppointmentOffSet())
 
-		if err := db.Find(&appointments).Error; err != nil {
-			return nil, 0, fmt.Errorf("failed to fetch appointment: %w", err)
-		}
+	if err := db.Find(&appointments).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to fetch appointment: %w", err)
+	}
 
-		return appointments, total, nil
+	return appointments, total, nil
 }
 
 func (r *appointmentRepository) FindAllDelete(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error) {
-        var appointments []models.Appointment
-		var total int64
+	var appointments []models.Appointment
+	var total int64
 
-		db := r.db.Unscoped().Model(&models.Appointment{}).Where("deleted_at IS NOT NULL")
+	db := r.db.Unscoped().Model(&models.Appointment{}).Where("deleted_at IS NOT NULL")
 
-		if query.Search != "" {
-			searchPattern := "%" + strings.ToLower(query.Search) + "%"
-			db = db.Where(
-				"LOWER(appointment_date) LIKE ? OR LOWER(status) LIKE ?",
-				searchPattern, searchPattern,
-			)
-		}
+	if query.Search != "" {
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
+		db = db.Where(
+			"LOWER(appointment_date) LIKE ? OR LOWER(status) LIKE ?",
+			searchPattern, searchPattern,
+		)
+	}
 
-		if err := db.Count(&total).Error; err != nil {
-			return nil, 0, fmt.Errorf("failed to count appointment: %w", err)
-		}
+	if err := db.Count(&total).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to count appointment: %w", err)
+	}
 
-		orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
-		db = db.Order(orderClause)
+	orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
+	db = db.Order(orderClause)
 
-		db = db.Limit(query.Limit).Offset(query.GetAppointmentOffSet())
+	db = db.Limit(query.Limit).Offset(query.GetAppointmentOffSet())
 
-		if err := db.Find(&appointments).Error; err != nil {
-			return nil, 0, fmt.Errorf("failed to fetch appointment: %w", err)
-		}
+	if err := db.Find(&appointments).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to fetch appointment: %w", err)
+	}
 
-		return appointments, total, nil
+	return appointments, total, nil
 }
