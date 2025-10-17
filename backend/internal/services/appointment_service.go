@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -8,11 +9,12 @@ import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
+	"gorm.io/gorm"
 )
 
 type AppointmentService interface {
 	CreateAppointment(req *validators.CreateAppointmentRequest) (*models.Appointment, error)
-	UpdateAppointment(id uint, req *validators.CreateAppointmentRequest) (*models.Appointment, error)
+	UpdateAppointment(id uint, req *validators.UpdateAppointmentRequest) (*models.Appointment, error)
 	DeleteAppointment(id uint) error
 	HardDeleteAppointment(id uint) error
 	RestoreAppointment(id uint) error
@@ -54,11 +56,20 @@ func (s *appointmentService) CreateAppointment(req *validators.CreateAppointment
 	}
 
 	return appointment, nil
-	// return nil, nil
 }
 
-func (s *appointmentService) UpdateAppointment(id uint, req *validators.CreateAppointmentRequest) (*models.Appointment, error) {
-	panic("not implemented") // TODO: Implement
+func (s *appointmentService) UpdateAppointment(id uint, req *validators.UpdateAppointmentRequest) (*models.Appointment, error) {
+	appointment, err := s.appointmentRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("appointment not found")
+		}
+		return nil, fmt.Errorf("failed to find appointment: %w", err)
+	}
+	if err := s.appointmentRepo.Update(appointment); err != nil {
+		return nil, fmt.Errorf("failed to updated appointment: %w", err)
+	}
+	return appointment, nil
 }
 
 func (s *appointmentService) DeleteAppointment(id uint) error {

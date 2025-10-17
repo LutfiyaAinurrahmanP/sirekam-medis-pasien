@@ -136,7 +136,7 @@ func (s *userService) UpdateUser(id uint, req *validators.UpdateUserRequest) (*m
 		if !models.ValidateRole(req.Role) {
 			return nil, errors.New("invalid role")
 		}
-		user.Role = req.Role
+	user.Role = req.Role
 	}
 
 	if err := s.userRepo.Update(user); err != nil {

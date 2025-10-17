@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
@@ -32,6 +34,30 @@ func (h *AppointmentHandler) CreateAppointment(c *fiber.Ctx) error {
 	}
 
 	return utils.SuccessResponse(c, "Appointment created successfully", fiber.Map{
+		"appointment": appointment,
+	})
+}
+
+func (h *AppointmentHandler) UpdateAppointment(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid appointment Id", nil)
+	}
+
+	var req validators.UpdateAppointmentRequest
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
+
+	appointment, err := h.appointmentService.UpdateAppointment(uint(id), &req)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed updated successfully")
+	}
+
+	return utils.SuccessResponse(c, "Appointment updated successfully", fiber.Map{
 		"appointment": appointment,
 	})
 }

@@ -88,6 +88,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 		appointment := admin.Group("/appointment")
 		{
 			appointment.Post("/create", config.AppointmentHandler.CreateAppointment)
+			appointment.Put("/update/:id", config.AppointmentHandler.UpdateAppointment)
 		}
 
 		// User Management Routes (Admin)
