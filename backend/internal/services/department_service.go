@@ -1,0 +1,84 @@
+package services
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/models"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
+)
+
+type DepartmentService interface {
+	CreateDepartment(req *validators.CreateDepartmentRequest) (*models.Department, error)
+	UpdateDepartment(id uint, req *validators.UpdateDepartmentRequest) (*models.Department, error)
+	DeleteDepartment(id uint) error
+	HardDeleteDepartment(id uint) error
+	RestoreDepartment(id uint) error
+
+	GetDepartmentByID(id uint) (*models.Department, error)
+	GetAllDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
+	GetAllDeletedDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
+}
+
+type departmentService struct {
+	departmentRepo repositories.DepartmentRepository
+}
+
+func NewDepartmentService(departmentRepo repositories.DepartmentRepository) DepartmentService {
+	return &departmentService{
+		departmentRepo: departmentRepo,
+	}
+}
+
+func (s *departmentService) CreateDepartment(req *validators.CreateDepartmentRequest) (*models.Department, error) {
+	exists, err := s.departmentRepo.ExistsByCode(req.Code)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check code: %w", err)
+	}
+	if exists {
+		return nil, errors.New("code already exists")
+	}
+
+	department := &models.Department{
+		Name:          req.Name,
+		Code:          req.Code,
+		Description:   req.Description,
+		FloorLocation: req.FloorLocation,
+	}
+
+	if err := s.departmentRepo.Create(department); err != nil {
+		return nil, fmt.Errorf("failed to created department: %w", err)
+	}
+
+	return department, nil
+}
+
+func (s *departmentService) UpdateDepartment(id uint, req *validators.UpdateDepartmentRequest) (*models.Department, error) {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) DeleteDepartment(id uint) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) HardDeleteDepartment(id uint) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) RestoreDepartment(id uint) error {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) GetDepartmentByID(id uint) (*models.Department, error) {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) GetAllDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
+	panic("not implemented") // TODO: Implement
+}
+
+func (s *departmentService) GetAllDeletedDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
+	panic("not implemented") // TODO: Implement
+}

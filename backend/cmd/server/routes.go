@@ -10,6 +10,7 @@ import (
 type RouteConfig struct {
 	AuthHandler        *handlers.AuthHandler
 	UserHandler        *handlers.UserHandler
+	DepartmentHandler  *handlers.DepartmentHandler
 	AppointmentHandler *handlers.AppointmentHandler
 	JWTSecret          string
 	TokenRepo          repositories.TokenRepository
@@ -84,6 +85,11 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 				},
 			})
 		})
+
+		department := admin.Group("/department")
+		{
+			department.Post("/create", config.DepartmentHandler.CreateDepartment)
+		}
 
 		appointment := admin.Group("/appointment")
 		{

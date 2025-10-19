@@ -43,6 +43,7 @@ func main() {
 	modelsToMigrate := []interface{}{
 		&models.User{},           // Model User dengan field role
 		&models.TokenBlacklist{}, // Token blacklist untuk logout
+		&models.Department{},     // Department model
 		&models.Appointment{},
 		&models.Doctor{},
 		&models.Patient{},
@@ -60,16 +61,19 @@ func main() {
 	// Repository Layer
 	userRepo := repositories.NewUserRepository(db)
 	tokenRepo := repositories.NewTokenRepository(db)
+	departmentRepo := repositories.NewDepartmentRepository(db)
 	appointmentRepo := repositories.NewAppointmentRepository(db)
 
 	// Service Layer
 	authService := services.NewAuthService(userRepo, tokenRepo, cfg.JWTSecret)
 	userService := services.NewUserService(userRepo)
+	departmentService := services.NewDepartmentService(departmentRepo)
 	appointmentService := services.NewAppointmentService(appointmentRepo)
 
 	// Handler Layer
 	authHandler := handlers.NewAuthHandler(authService)
 	userHandler := handlers.NewUserHandler(userService)
+	departmentHandler := handlers.NewDepartmentHandler(departmentService)
 	appointmentHandler := handlers.NewAppointmentHandler(appointmentService)
 
 	log.Println("✅ Dependencies initialized successfully")
@@ -131,6 +135,7 @@ func main() {
 	routeConfig := &RouteConfig{
 		AuthHandler:        authHandler,
 		UserHandler:        userHandler,
+		DepartmentHandler:  departmentHandler,
 		AppointmentHandler: appointmentHandler,
 		JWTSecret:          cfg.JWTSecret,
 		TokenRepo:          tokenRepo,
