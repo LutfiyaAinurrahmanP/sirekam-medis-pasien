@@ -89,6 +89,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 		department := admin.Group("/department")
 		{
 			department.Post("/create", config.DepartmentHandler.CreateDepartment)
+			department.Put("/update/:id", config.DepartmentHandler.UpdateDepartment)
 		}
 
 		appointment := admin.Group("/appointment")

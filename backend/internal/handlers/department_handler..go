@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
@@ -37,6 +39,34 @@ func (h *DepartmentHandler) CreateDepartment(c *fiber.Ctx) error {
 		return utils.InternalServerErrorResponse(c, "Failed to create department")
 	}
 	return utils.CreatedResponse(c, "Department created successfully", fiber.Map{
+		"department": department,
+	})
+}
+
+func (h *DepartmentHandler) UpdateDepartment(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid department id", nil)
+	}
+
+	var req validators.UpdateDepartmentRequest
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
+
+	department, err := h.departmentService.UpdateDepartment(uint(id), &req)
+	if err != nil {
+		errorMessage := err.Error()
+
+		if errorMessage == "code already exists" {
+			return utils.ConflictResponse(c, errorMessage)
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to update department")
+	}
+	return utils.SuccessResponse(c, "Department updated successfully", fiber.Map{
 		"department": department,
 	})
 }

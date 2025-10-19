@@ -8,6 +8,7 @@ import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
+	"gorm.io/gorm"
 )
 
 type DepartmentService interface {
@@ -56,7 +57,41 @@ func (s *departmentService) CreateDepartment(req *validators.CreateDepartmentReq
 }
 
 func (s *departmentService) UpdateDepartment(id uint, req *validators.UpdateDepartmentRequest) (*models.Department, error) {
-	panic("not implemented") // TODO: Implement
+	department, err := s.departmentRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("department not found")
+		}
+		return nil, fmt.Errorf("failed to find department: %w", err)
+	}
+
+	if req.Code != "" && req.Code != department.Code {
+		exists, err := s.departmentRepo.ExistsByCode(req.Code)
+		if err != nil {
+			return nil, fmt.Errorf("failed to check code: %w", err)
+		}
+		if exists {
+			return nil, errors.New("code already exists")
+		}
+		department.Code = req.Code
+	}
+
+	if req.Description != "" && req.Description != department.Description {
+		department.Description = req.Description
+	}
+
+	if req.FloorLocation != "" && req.FloorLocation != department.FloorLocation {
+		department.FloorLocation = req.FloorLocation
+	}
+
+	if req.Name != "" && req.Name != department.Name {
+		department.Name = req.Name
+	}
+
+	if err := s.departmentRepo.Update(department); err != nil {
+		return nil, fmt.Errorf("failed to updated department: %w", err)
+	}
+	return department, nil
 }
 
 func (s *departmentService) DeleteDepartment(id uint) error {

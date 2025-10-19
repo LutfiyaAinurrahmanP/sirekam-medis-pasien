@@ -9,13 +9,13 @@ import (
 type DepartmentRepository interface {
 	Create(department *models.Department) error
 	Update(department *models.Department) error
-	Delet(id uint) error
+	Delete(id uint) error
 	HardDelete(id uint) error
 	Restore(id uint) error
 
 	FindById(id uint) (*models.Department, error)
-	FindAll(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error)
-	FindAllDelete(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error)
+	FindAll(query *validators.ListDepartmentQuery) ([]models.Department, int64, error)
+	FindAllDelete(query *validators.ListDepartmentQuery) ([]models.Department, int64, error)
 
 	ExistsByCode(code string) (bool, error)
 }
@@ -35,10 +35,10 @@ func (r *departmentRepository) Create(department *models.Department) error {
 }
 
 func (r *departmentRepository) Update(department *models.Department) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Save(department).Error
 }
 
-func (r *departmentRepository) Delet(id uint) error {
+func (r *departmentRepository) Delete(id uint) error {
 	panic("not implemented") // TODO: Implement
 }
 
@@ -51,14 +51,19 @@ func (r *departmentRepository) Restore(id uint) error {
 }
 
 func (r *departmentRepository) FindById(id uint) (*models.Department, error) {
+	var department models.Department
+	err := r.db.First(&department, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &department, nil
+}
+
+func (r *departmentRepository) FindAll(query *validators.ListDepartmentQuery) ([]models.Department, int64, error) {
 	panic("not implemented") // TODO: Implement
 }
 
-func (r *departmentRepository) FindAll(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error) {
-	panic("not implemented") // TODO: Implement
-}
-
-func (r *departmentRepository) FindAllDelete(query *validators.ListAppointmentQuery) ([]models.Appointment, int64, error) {
+func (r *departmentRepository) FindAllDelete(query *validators.ListDepartmentQuery) ([]models.Department, int64, error) {
 	panic("not implemented") // TODO: Implement
 }
 
