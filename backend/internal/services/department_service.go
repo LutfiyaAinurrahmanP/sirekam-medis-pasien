@@ -95,7 +95,18 @@ func (s *departmentService) UpdateDepartment(id uint, req *validators.UpdateDepa
 }
 
 func (s *departmentService) DeleteDepartment(id uint) error {
-	panic("not implemented") // TODO: Implement
+	_, err := s.departmentRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			return errors.New("department not found")
+		}
+		return fmt.Errorf("failed to find department: %w", err)
+	}
+
+	if err := s.departmentRepo.Delete(id); err != nil {
+		return fmt.Errorf("failed to delete department: %w", err)
+	}
+	return nil
 }
 
 func (s *departmentService) HardDeleteDepartment(id uint) error {

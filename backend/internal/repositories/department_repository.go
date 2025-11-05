@@ -42,7 +42,7 @@ func (r *departmentRepository) Update(department *models.Department) error {
 }
 
 func (r *departmentRepository) Delete(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Delete(&models.Department{}, id).Error
 }
 
 func (r *departmentRepository) HardDelete(id uint) error {

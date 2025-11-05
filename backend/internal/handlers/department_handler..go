@@ -93,3 +93,19 @@ func (h *DepartmentHandler) GetAllDepartment(c *fiber.Ctx) error{
 		"department": departments,
 	}, meta)
 }
+
+func (h *DepartmentHandler) DeleteDepartment(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)		
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid department ID", nil)
+	}
+
+	if err := h.departmentService.DeleteDepartment(uint(id)); err != nil {
+		if err.Error() == "department not found" {
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to permanetly delete department")
+	}
+
+	return utils.SuccessResponse(c, "Department permanently deleted", nil)
+}
