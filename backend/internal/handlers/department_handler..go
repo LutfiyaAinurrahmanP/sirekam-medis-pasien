@@ -70,3 +70,26 @@ func (h *DepartmentHandler) UpdateDepartment(c *fiber.Ctx) error {
 		"department": department,
 	})
 }
+
+func (h *DepartmentHandler) GetAllDepartment(c *fiber.Ctx) error{
+	var query validators.ListDepartmentQuery
+
+	if err := c.QueryParser(&query); err != nil {
+		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
+	}
+
+	if err := validators.ValidateStruct(&query); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+	}
+
+	departments, meta, err := h.departmentService.GetAllDepartments(&query)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to fetch department")
+	}
+
+	return utils.PaginatedSeccessResponse(c, "Department retrieved successfully", fiber.Map{
+		"department": departments,
+	}, meta)
+}

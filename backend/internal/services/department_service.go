@@ -19,8 +19,8 @@ type DepartmentService interface {
 	RestoreDepartment(id uint) error
 
 	GetDepartmentByID(id uint) (*models.Department, error)
-	GetAllDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
-	GetAllDeletedDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
+	GetAllDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
+	GetAllDeletedDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error)
 }
 
 type departmentService struct {
@@ -110,10 +110,23 @@ func (s *departmentService) GetDepartmentByID(id uint) (*models.Department, erro
 	panic("not implemented") // TODO: Implement
 }
 
-func (s *departmentService) GetAllDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+func (s *departmentService) GetAllDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
+	query.SetDepartmentDefaults()
+
+	departments, total, err := s.departmentRepo.FindAll(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch department: %w", err)
+	}
+
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) - 1) /int64(query.Limit),
+	}
+	return departments, meta, nil
 }
 
-func (s *departmentService) GetAllDeletedDepartment(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
+func (s *departmentService) GetAllDeletedDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
 	panic("not implemented") // TODO: Implement
 }
