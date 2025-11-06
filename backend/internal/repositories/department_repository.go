@@ -46,7 +46,7 @@ func (r *departmentRepository) Delete(id uint) error {
 }
 
 func (r *departmentRepository) HardDelete(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Unscoped().Delete(&models.Department{}, id).Error
 }
 
 func (r *departmentRepository) Restore(id uint) error {

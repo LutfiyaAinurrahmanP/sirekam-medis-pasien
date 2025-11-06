@@ -110,7 +110,10 @@ func (s *departmentService) DeleteDepartment(id uint) error {
 }
 
 func (s *departmentService) HardDeleteDepartment(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.departmentRepo.HardDelete(id); err != nil {
+		return fmt.Errorf("failed to permanently delete department: %w", err)
+	}
+	return nil
 }
 
 func (s *departmentService) RestoreDepartment(id uint) error {
