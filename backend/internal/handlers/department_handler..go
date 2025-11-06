@@ -133,3 +133,44 @@ func (h *DepartmentHandler) RestoreDepartment(c *fiber.Ctx) error {
 	}
 	return utils.SuccessResponse(c, "Department restore successfully", nil)
 }
+
+func (h *DepartmentHandler) GetDepartmentByID(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid department ID", nil)
+	}
+	department, err := h.departmentService.GetDepartmentByID(uint(id))
+	if err != nil {
+		if err.Error() == "department not found" {
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to fetch department")
+	}
+
+	return utils.SuccessResponse(c, "Department retrieved successfully", fiber.Map{
+		"department": department,
+	})
+}
+
+func (h *DepartmentHandler) GetAllDeletedDepartment(c *fiber.Ctx) error{
+	var query validators.ListDepartmentQuery
+
+	if err := c.QueryParser(&query); err != nil {
+		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
+	}
+
+	if err := validators.ValidateStruct(&query); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+	}
+
+	departments, meta, err := h.departmentService.GetAllDeletedDepartments(&query)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to fetch department")
+	}
+
+	return utils.PaginatedSeccessResponse(c, "Department retrieved successfully", fiber.Map{
+		"department": departments,
+	}, meta)
+}

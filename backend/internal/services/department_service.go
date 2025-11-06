@@ -124,7 +124,14 @@ func (s *departmentService) RestoreDepartment(id uint) error {
 }
 
 func (s *departmentService) GetDepartmentByID(id uint) (*models.Department, error) {
-	panic("not implemented") // TODO: Implement
+	department, err := s.departmentRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("department not found")
+		}
+		return nil, fmt.Errorf("failed to get department: %w", err)
+	}
+	return department, nil
 }
 
 func (s *departmentService) GetAllDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
@@ -145,5 +152,18 @@ func (s *departmentService) GetAllDepartments(query *validators.ListDepartmentQu
 }
 
 func (s *departmentService) GetAllDeletedDepartments(query *validators.ListDepartmentQuery) ([]models.Department, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+	query.SetDepartmentDefaults()
+
+	departments, total, err := s.departmentRepo.FindAllDelete(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch department: %w", err)
+	}
+
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) - 1) /int64(query.Limit),
+	}
+	return departments, meta, nil
 }
