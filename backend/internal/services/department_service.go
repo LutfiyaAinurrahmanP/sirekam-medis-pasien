@@ -117,7 +117,10 @@ func (s *departmentService) HardDeleteDepartment(id uint) error {
 }
 
 func (s *departmentService) RestoreDepartment(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.departmentRepo.Restore(id); err != nil {
+		return fmt.Errorf("failed to restore department: %w", err)
+	}
+	return nil
 }
 
 func (s *departmentService) GetDepartmentByID(id uint) (*models.Department, error) {

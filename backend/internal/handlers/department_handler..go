@@ -122,3 +122,14 @@ func (h *DepartmentHandler) HardDeleteDepartment(c *fiber.Ctx) error {
 
 	return utils.SuccessResponse(c, "Department permanently deleted", nil)
 }
+
+func (h *DepartmentHandler) RestoreDepartment(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10 ,32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid department ID", nil)
+	}
+	if err := h.departmentService.RestoreDepartment(uint(id)); err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to restore department")
+	}
+	return utils.SuccessResponse(c, "Department restore successfully", nil)
+}

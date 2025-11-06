@@ -50,7 +50,7 @@ func (r *departmentRepository) HardDelete(id uint) error {
 }
 
 func (r *departmentRepository) Restore(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Model(&models.Department{}).Unscoped().Where("id = ?", id).Update("deleted_at", nil).Error
 }
 
 func (r *departmentRepository) FindById(id uint) (*models.Department, error) {

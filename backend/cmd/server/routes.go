@@ -93,6 +93,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 			department.Put("/update/:id", config.DepartmentHandler.UpdateDepartment)
 			department.Delete("/:id", config.DepartmentHandler.DeleteDepartment)
 			department.Delete("/permanent/:id", config.DepartmentHandler.HardDeleteDepartment)
+			department.Post("/restore/:id", config.DepartmentHandler.RestoreDepartment)
 		}
 
 		appointment := admin.Group("/appointment")
