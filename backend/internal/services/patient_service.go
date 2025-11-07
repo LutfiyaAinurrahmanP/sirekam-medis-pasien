@@ -8,11 +8,12 @@ import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
+	"gorm.io/gorm"
 )
 
 type PatientService interface {
 	CreatePatient(req *validators.CreatePatientRequest) (*models.Patient, error)
-	UpdatePatient(id, req *validators.UpdatePatientRequest) (*models.Patient, error)
+	UpdatePatient(id uint, req *validators.UpdatePatientRequest) (*models.Patient, error)
 	DeletePatient(id uint) error
 	HardDeletePatient(id uint) error
 	Restore(id uint) error
@@ -66,8 +67,82 @@ func (s *patientService) CreatePatient(req *validators.CreatePatientRequest) (*m
 	return patient, nil
 }
 
-func (s *patientService) UpdatePatient(id *validators.UpdatePatientRequest, req *validators.UpdatePatientRequest) (*models.Patient, error) {
-	panic("not implemented") // TODO: Implement
+func (s *patientService) UpdatePatient(id uint, req *validators.UpdatePatientRequest) (*models.Patient, error) {
+	patient, err := s.patientRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("patient not found")
+		}
+		return nil, fmt.Errorf("failed to find patient: %w", err)
+	}
+
+	if req.PatientCode != "" && req.PatientCode != patient.PatientCode {
+		exists, err := s.patientRepo.ExistsByPatientCode(req.PatientCode)
+		if err != nil {
+			return nil, fmt.Errorf("failed to check patient code: %w", err)
+		}
+		if exists {
+			return nil, errors.New("patient code already exists")
+		}
+		patient.PatientCode = req.PatientCode
+	}
+
+	if req.UserID != nil && req.UserID != patient.UserID {
+		patient.UserID = req.UserID
+	}
+
+	if req.FullName != "" && req.FullName != patient.FullName {
+		patient.FullName = req.FullName
+	}
+
+	if !req.DateOfBirth.IsZero() && req.DateOfBirth != patient.DateOfBirth {
+		patient.DateOfBirth = req.DateOfBirth
+	}
+
+	if req.Gender != "" && req.Gender != patient.Gender {
+		patient.Gender = req.Gender
+	}
+
+	if req.BloodType != "" && req.BloodType != patient.BloodType {
+		patient.BloodType = req.BloodType
+	}
+
+	if req.Phone != "" && req.Phone != patient.Phone {
+		patient.Phone = req.Phone
+	}
+
+	if req.Email != "" && req.Email != patient.Email {
+		patient.Email = req.Email
+	}
+
+	if req.Address != "" && req.Address != patient.Address {
+		patient.Address = req.Address
+	}
+
+	if req.EmergencyContactName != "" && req.EmergencyContactName != patient.EmergencyContactName {
+		patient.EmergencyContactName = req.EmergencyContactName
+	}
+
+	if req.EmergencyContactPhone != "" && req.EmergencyContactPhone != patient.EmergencyContactPhone {
+		patient.EmergencyContactPhone = req.EmergencyContactPhone
+	}
+
+	if req.InsuranceNumber != "" && req.InsuranceNumber != patient.InsuranceNumber {
+		patient.InsuranceNumber = req.InsuranceNumber
+	}
+
+	if req.InsuranceProvider != "" && req.InsuranceProvider != patient.InsuranceProvider {
+		patient.InsuranceProvider = req.InsuranceProvider
+	}
+
+	if req.Allergies != "" && req.Allergies != patient.Allergies {
+		patient.Allergies = req.Allergies
+	}
+
+	if err := s.patientRepo.Update(patient); err != nil {
+		return nil, fmt.Errorf("failed to updated patient: %w", err)
+	}
+	return patient, err
 }
 
 func (s *patientService) DeletePatient(id uint) error {

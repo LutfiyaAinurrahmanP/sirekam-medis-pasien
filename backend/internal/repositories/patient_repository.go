@@ -35,7 +35,7 @@ func (r *patientRepository) Create(patient *models.Patient) error {
 }
 
 func (r *patientRepository) Update(patient *models.Patient) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Save(patient).Error
 }
 
 func (r *patientRepository) Delete(id uint) error {
@@ -51,7 +51,12 @@ func (r *patientRepository) Restore(id uint) error {
 }
 
 func (r *patientRepository) FindById(id uint) (*models.Patient, error) {
-	panic("not implemented") // TODO: Implement
+	var patient models.Patient
+	err := r.db.First(&patient, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &patient, nil
 }
 
 func (r *patientRepository) FindAll(query *validators.ListPatientQuery) ([]models.Patient, int64, error) {
