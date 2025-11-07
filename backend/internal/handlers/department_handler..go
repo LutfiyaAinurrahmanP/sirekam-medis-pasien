@@ -71,7 +71,7 @@ func (h *DepartmentHandler) UpdateDepartment(c *fiber.Ctx) error {
 	})
 }
 
-func (h *DepartmentHandler) GetAllDepartment(c *fiber.Ctx) error{
+func (h *DepartmentHandler) GetAllDepartment(c *fiber.Ctx) error {
 	var query validators.ListDepartmentQuery
 
 	if err := c.QueryParser(&query); err != nil {
@@ -95,7 +95,7 @@ func (h *DepartmentHandler) GetAllDepartment(c *fiber.Ctx) error{
 }
 
 func (h *DepartmentHandler) DeleteDepartment(c *fiber.Ctx) error {
-	id, err := strconv.ParseUint(c.Params("id"), 10, 32)		
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
 	if err != nil {
 		return utils.BadRequestResponse(c, "Invalid department ID", nil)
 	}
@@ -124,7 +124,7 @@ func (h *DepartmentHandler) HardDeleteDepartment(c *fiber.Ctx) error {
 }
 
 func (h *DepartmentHandler) RestoreDepartment(c *fiber.Ctx) error {
-	id, err := strconv.ParseUint(c.Params("id"), 10 ,32)
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
 	if err != nil {
 		return utils.BadRequestResponse(c, "Invalid department ID", nil)
 	}
@@ -152,7 +152,7 @@ func (h *DepartmentHandler) GetDepartmentByID(c *fiber.Ctx) error {
 	})
 }
 
-func (h *DepartmentHandler) GetAllDeletedDepartment(c *fiber.Ctx) error{
+func (h *DepartmentHandler) GetAllDeletedDepartment(c *fiber.Ctx) error {
 	var query validators.ListDepartmentQuery
 
 	if err := c.QueryParser(&query); err != nil {

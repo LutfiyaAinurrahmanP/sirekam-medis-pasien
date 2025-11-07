@@ -68,7 +68,7 @@ func (r *departmentRepository) FindAll(query *validators.ListDepartmentQuery) ([
 
 	db := r.db.Model(&models.Department{})
 
-	if query.Search != ""{
+	if query.Search != "" {
 		searchPattern := "%" + strings.ToLower(query.Search) + "%"
 		db = db.Where(
 			"LOWER(name) LIKE ? OR LOWER(code) LIKE ? OR LOWER(floor_location) LIKE ?",
@@ -97,7 +97,7 @@ func (r *departmentRepository) FindAllDelete(query *validators.ListDepartmentQue
 
 	db := r.db.Unscoped().Model(&models.Department{}).Where("deleted_at IS NOT NULL")
 
-	if query.Search != ""{
+	if query.Search != "" {
 		searchPattern := "%" + strings.ToLower(query.Search) + "%"
 		db = db.Where(
 			"LOWER(name) LIKE ? OR LOWER(code) LIKE ? OR LOWER(floor_location) LIKE ?",

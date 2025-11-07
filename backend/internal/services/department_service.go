@@ -97,7 +97,7 @@ func (s *departmentService) UpdateDepartment(id uint, req *validators.UpdateDepa
 func (s *departmentService) DeleteDepartment(id uint) error {
 	_, err := s.departmentRepo.FindById(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("department not found")
 		}
 		return fmt.Errorf("failed to find department: %w", err)
@@ -144,9 +144,9 @@ func (s *departmentService) GetAllDepartments(query *validators.ListDepartmentQu
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) - 1) /int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 	return departments, meta, nil
 }
@@ -161,9 +161,9 @@ func (s *departmentService) GetAllDeletedDepartments(query *validators.ListDepar
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) - 1) /int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 	return departments, meta, nil
 }

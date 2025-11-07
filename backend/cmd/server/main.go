@@ -62,18 +62,21 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	tokenRepo := repositories.NewTokenRepository(db)
 	departmentRepo := repositories.NewDepartmentRepository(db)
+	patientRepo := repositories.NewPatientRepository(db)
 	appointmentRepo := repositories.NewAppointmentRepository(db)
 
 	// Service Layer
 	authService := services.NewAuthService(userRepo, tokenRepo, cfg.JWTSecret)
 	userService := services.NewUserService(userRepo)
 	departmentService := services.NewDepartmentService(departmentRepo)
+	patientService := services.NewPatientService(patientRepo)
 	appointmentService := services.NewAppointmentService(appointmentRepo)
 
 	// Handler Layer
 	authHandler := handlers.NewAuthHandler(authService)
 	userHandler := handlers.NewUserHandler(userService)
 	departmentHandler := handlers.NewDepartmentHandler(departmentService)
+	patientHandler := handlers.NewPatientHandler(patientService)
 	appointmentHandler := handlers.NewAppointmentHandler(appointmentService)
 
 	log.Println("✅ Dependencies initialized successfully")
@@ -136,6 +139,7 @@ func main() {
 		AuthHandler:        authHandler,
 		UserHandler:        userHandler,
 		DepartmentHandler:  departmentHandler,
+		PatientHandler:     patientHandler,
 		AppointmentHandler: appointmentHandler,
 		JWTSecret:          cfg.JWTSecret,
 		TokenRepo:          tokenRepo,

@@ -11,6 +11,7 @@ type RouteConfig struct {
 	AuthHandler        *handlers.AuthHandler
 	UserHandler        *handlers.UserHandler
 	DepartmentHandler  *handlers.DepartmentHandler
+	PatientHandler     handlers.PatientHandler
 	AppointmentHandler *handlers.AppointmentHandler
 	JWTSecret          string
 	TokenRepo          repositories.TokenRepository
@@ -96,6 +97,11 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 			department.Delete("/permanent/:id", config.DepartmentHandler.HardDeleteDepartment)
 			department.Post("/restore/:id", config.DepartmentHandler.RestoreDepartment)
 			department.Get("/:id", config.DepartmentHandler.GetDepartmentByID)
+		}
+
+		patient := admin.Group("/patient")
+		{
+			patient.Post("/create", config.PatientHandler.CreatePatient)
 		}
 
 		appointment := admin.Group("/appointment")

@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,43 +20,63 @@ type PatientHandler interface {
 }
 
 type patientHandler struct {
-  patientService services.PatientService
+	patientService services.PatientService
 }
 
-func NewPatientHandler(patientService services.PatientService) PatientHandler{
+func NewPatientHandler(patientService services.PatientService) PatientHandler {
 	return &patientHandler{
 		patientService: patientService,
 	}
 }
 
 func (h *patientHandler) CreatePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	var req validators.CreatePatientRequest
+
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
+
+	patient, err := h.patientService.CreatePatient(&req)
+	if err != nil {
+		errorMessage := err.Error()
+
+		if errorMessage == "patient code already exists" {
+			return utils.ConflictResponse(c, errorMessage)
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to create patient")
+	}
+	return utils.SuccessResponse(c, "Patient created successfully", fiber.Map{
+		"patient": patient,
+	})
 }
 
 func (h *patientHandler) UpdatePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) DeletePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) HardDeletePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) RestorePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) GetByIDPatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) GetAllPatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *patientHandler) GetAllDeletePatient(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
