@@ -93,7 +93,32 @@ func (r *patientRepository) FindAll(query *validators.ListPatientQuery) ([]model
 }
 
 func (r *patientRepository) FindAllDelete(query *validators.ListPatientQuery) ([]models.Patient, int64, error) {
-	panic("not implemented") // TODO: Implement
+	var patient []models.Patient
+	var total int64
+
+	db := r.db.Unscoped().Model(&models.Patient{}).Where("deleted_at IS NOT NULL")
+
+	if query.Search != "" {
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
+		db = db.Where(
+			"LOWER(patient_code) LIKE ? OR LOWER(full_name) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(email) LIKE ?",
+			searchPattern, searchPattern, searchPattern, searchPattern, 
+		)
+	}
+
+	if err := db.Count(&total).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to count patients: %w", err)
+	}
+
+	orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
+	db = db.Order(orderClause)
+
+	db = db.Limit(query.Limit).Offset(query.GetPatientOffSet())
+
+	if err := db.Find(&patient).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to fetch patients: %w", err)
+	}
+	return patient, total, nil
 }
 
 func (r *patientRepository) ExistsByPatientCode(patientCode string) (bool, error) {

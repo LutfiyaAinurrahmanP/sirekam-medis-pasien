@@ -151,5 +151,17 @@ func (h *patientHandler) GetAllPatient(c *fiber.Ctx) error {
 }
 
 func (h *patientHandler) GetAllDeletePatient(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	var query validators.ListPatientQuery
+
+	if err := c.QueryParser(&query); err != nil {
+		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
+	}
+
+	patients, meta, err := h.patientService.GetAllDeletePatient(&query)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to fetch patient")
+	}
+	return utils.PaginatedSeccessResponse(c, "Patients retrieved successfully", fiber.Map{
+		"patient": patients,
+	}, meta)
 }
