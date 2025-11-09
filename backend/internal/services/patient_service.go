@@ -175,7 +175,14 @@ func (s *patientService) Restore(id uint) error {
 }
 
 func (s *patientService) GetPatientByID(id uint) (*models.Patient, error) {
-	panic("not implemented") // TODO: Implement
+	patient, err := s.patientRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("patient not found")
+		}
+		return nil, fmt.Errorf("failed to get patient: %w", err)
+	}
+	return patient, nil
 }
 
 func (s *patientService) GetAllPatient(query *validators.ListPatientQuery) ([]models.Patient, *utils.PaginationMeta, error) {

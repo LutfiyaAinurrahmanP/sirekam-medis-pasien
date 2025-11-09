@@ -125,7 +125,20 @@ func (h *patientHandler) RestorePatient(c *fiber.Ctx) error {
 }
 
 func (h *patientHandler) GetByIDPatient(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid department ID", nil)
+	}
+	patient, err := h.patientService.GetPatientByID(uint(id))
+	if err != nil {
+		if err.Error() == "patient not found" {
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to fetch patient")
+	}
+	return utils.SuccessResponse(c, "Patient return successfully", fiber.Map{
+		"patient": patient,
+	})
 }
 
 func (h *patientHandler) GetAllPatient(c *fiber.Ctx) error {
