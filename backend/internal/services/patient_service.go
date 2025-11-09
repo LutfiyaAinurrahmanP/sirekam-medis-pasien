@@ -179,7 +179,20 @@ func (s *patientService) GetPatientByID(id uint) (*models.Patient, error) {
 }
 
 func (s *patientService) GetAllPatient(query *validators.ListPatientQuery) ([]models.Patient, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+	query.SetPatientDefaults()
+
+	patients, total, err := s.patientRepo.FindAll(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch patient: %w", err)
+	}
+
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) -1) / int64(query.Limit),
+	}
+	return patients, meta, nil
 }
 
 func (s *patientService) GetAllDeletePatient(query *validators.ListPatientQuery) ([]models.Patient, *utils.PaginationMeta, error) {
