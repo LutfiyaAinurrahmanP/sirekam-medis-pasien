@@ -161,7 +161,10 @@ func (s *patientService) DeletePatient(id uint) error {
 }
 
 func (s *patientService) HardDeletePatient(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.patientRepo.HardDelete(id); err != nil {
+		return fmt.Errorf("failed to permanently delete patient: %w", err)
+	}
+	return nil
 }
 
 func (s *patientService) Restore(id uint) error {
