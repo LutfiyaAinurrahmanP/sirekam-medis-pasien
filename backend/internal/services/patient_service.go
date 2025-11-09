@@ -146,7 +146,18 @@ func (s *patientService) UpdatePatient(id uint, req *validators.UpdatePatientReq
 }
 
 func (s *patientService) DeletePatient(id uint) error {
-	panic("not implemented") // TODO: Implement
+	_, err := s.patientRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			return errors.New("patient not found")
+		}
+		return fmt.Errorf("failed to find patient: %w", err)
+	}
+
+	if err := s.patientRepo.Delete(id); err != nil {
+		return fmt.Errorf("failed to delete patient: %w", err)
+	}
+	return nil
 }
 
 func (s *patientService) HardDeletePatient(id uint) error {

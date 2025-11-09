@@ -39,7 +39,7 @@ func (r *patientRepository) Update(patient *models.Patient) error {
 }
 
 func (r *patientRepository) Delete(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Delete(&models.Patient{}, id).Error
 }
 
 func (r *patientRepository) HardDelete(id uint) error {
