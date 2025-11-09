@@ -113,7 +113,15 @@ func (h *patientHandler) HardDeletePatient(c *fiber.Ctx) error {
 }
 
 func (h *patientHandler) RestorePatient(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid patient ID", nil)
+	}
+
+	if err := h.patientService.Restore(uint(id)); err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to restore patient")
+	}
+	return utils.SuccessResponse(c, "Patient successfully to restore", nil)
 }
 
 func (h *patientHandler) GetByIDPatient(c *fiber.Ctx) error {

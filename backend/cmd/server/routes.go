@@ -105,6 +105,7 @@ func SetupRoutes(app *fiber.App, config *RouteConfig) {
 			patient.Put("/update/:id", config.PatientHandler.UpdatePatient)
 			patient.Delete("/:id", config.PatientHandler.DeletePatient)
 			patient.Delete("/permanent/:id", config.PatientHandler.HardDeletePatient)
+			patient.Post("/restore/:id", config.PatientHandler.RestorePatient)
 		}
 
 		appointment := admin.Group("/appointment")

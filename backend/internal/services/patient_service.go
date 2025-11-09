@@ -168,7 +168,10 @@ func (s *patientService) HardDeletePatient(id uint) error {
 }
 
 func (s *patientService) Restore(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.patientRepo.Restore(id); err != nil {
+		return fmt.Errorf("failed to restore patient data: %w", err)
+	}
+	return nil
 }
 
 func (s *patientService) GetPatientByID(id uint) (*models.Patient, error) {
