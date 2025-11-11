@@ -148,7 +148,7 @@ func (s *patientService) UpdatePatient(id uint, req *validators.UpdatePatientReq
 func (s *patientService) DeletePatient(id uint) error {
 	_, err := s.patientRepo.FindById(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("patient not found")
 		}
 		return fmt.Errorf("failed to find patient: %w", err)
@@ -195,9 +195,9 @@ func (s *patientService) GetAllPatient(query *validators.ListPatientQuery) ([]mo
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) -1) / int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 	return patients, meta, nil
 }
@@ -212,9 +212,9 @@ func (s *patientService) GetAllDeletePatient(query *validators.ListPatientQuery)
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) -1) / int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 
 	return patients, meta, nil

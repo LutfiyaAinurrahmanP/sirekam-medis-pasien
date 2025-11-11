@@ -14,8 +14,8 @@ type MedicineRepository interface {
 	Restore(id uint) error
 
 	FindByID(id uint) (*models.Medicine, error)
-	FindAll(query *validators.ListMedicineQuery) ([]models.Medicine, error)
-	FindAllDelete(query *validators.ListMedicineQuery) ([]models.Medicine, error)
+	FindAll(query *validators.ListMedicineQuery) ([]models.Medicine, int64, error)
+	FindAllDelete(query *validators.ListMedicineQuery) ([]models.Medicine, int64, error)
 }
 
 type medicineRepository struct {
@@ -52,10 +52,10 @@ func (r *medicineRepository) FindByID(id uint) (*models.Medicine, error) {
         panic("not implemented") // TODO: Implement
 }
 
-func (r *medicineRepository) FindAll(query *validators.ListMedicineQuery) ([]models.Medicine, error) {
+func (r *medicineRepository) FindAll(query *validators.ListMedicineQuery) ([]models.Medicine, int64, error) {
         panic("not implemented") // TODO: Implement
 }
 
-func (r *medicineRepository) FindAllDelete(query *validators.ListMedicineQuery) ([]models.Medicine, error) {
+func (r *medicineRepository) FindAllDelete(query *validators.ListMedicineQuery) ([]models.Medicine, int64, error) {
         panic("not implemented") // TODO: Implement
 }

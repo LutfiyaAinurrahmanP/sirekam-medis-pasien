@@ -69,10 +69,10 @@ func (r *patientRepository) FindAll(query *validators.ListPatientQuery) ([]model
 	db := r.db.Model(&models.Patient{})
 
 	if query.Search != "" {
-		searchPattern := "%" + strings.ToLower(query.Search)+ "%"
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
 		db = db.Where(
 			"LOWER(patient_code) LIKE ? OR LOWER(full_name) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(email) LIKE ?",
-			searchPattern, searchPattern, searchPattern, searchPattern, 
+			searchPattern, searchPattern, searchPattern, searchPattern,
 		)
 	}
 
@@ -102,7 +102,7 @@ func (r *patientRepository) FindAllDelete(query *validators.ListPatientQuery) ([
 		searchPattern := "%" + strings.ToLower(query.Search) + "%"
 		db = db.Where(
 			"LOWER(patient_code) LIKE ? OR LOWER(full_name) LIKE ? OR LOWER(phone) LIKE ? OR LOWER(email) LIKE ?",
-			searchPattern, searchPattern, searchPattern, searchPattern, 
+			searchPattern, searchPattern, searchPattern, searchPattern,
 		)
 	}
 
