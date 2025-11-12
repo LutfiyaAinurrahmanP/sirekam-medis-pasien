@@ -127,7 +127,10 @@ func (s *medicineService) DeleteMedicine(id uint) error {
 }
 
 func (s *medicineService) HardDeleteMedicine(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.medicineRepo.HardDelete(id); err != nil {
+		return fmt.Errorf("failed to permanently delete medicine: %w", err)
+	}
+	return nil
 }
 
 func (s *medicineService) RestoreMedicine(id uint) error {
