@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
@@ -49,7 +51,26 @@ func (h *medicineHandler) CreateMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) UpdateMedicine(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid medicine ID: %w", err)
+	}
+
+	var req validators.UpdateMedicineRequest
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
+
+	medicine, err := h.medicineService.UpdateMedicine(uint(id), &req)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to updated medicine")
+	}
+	return utils.SuccessResponse(c, "Medicine update successfully", fiber.Map{
+		"medicine": medicine,
+	})
 }
 
 func (h *medicineHandler) DeleteMedicine(c *fiber.Ctx) error {
@@ -65,7 +86,22 @@ func (h *medicineHandler) RestoreMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) GetByIDMedicine(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32);
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid medicine ID: %w", err)
+	}
+
+	medicine, err := h.medicineService.GetMedicineByID(uint(id))
+	if err != nil {
+		if err.Error() == "medicine not found"{
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to fetch medicine")
+	}
+
+	return utils.SuccessResponse(c, "Medicine retrieved successfully", fiber.Map{
+		"medicine": medicine,
+	})
 }
 
 func (h *medicineHandler) GetAllMedicine(c *fiber.Ctx) error {
