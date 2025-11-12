@@ -111,7 +111,19 @@ func (s *medicineService) UpdateMedicine(id uint, req *validators.UpdateMedicine
 }
 
 func (s *medicineService) DeleteMedicine(id uint) error {
-	panic("not implemented") // TODO: Implement
+	_, err := s.medicineRepo.FindByID(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			return errors.New("medicine not found")
+		}
+		return fmt.Errorf("failed to find medicine ID: %w", err)
+	}
+
+	if err := s.medicineRepo.Delete(id); err != nil {
+		return fmt.Errorf("failed to delete medicine: %w", err)
+	}
+
+	return nil
 }
 
 func (s *medicineService) HardDeleteMedicine(id uint) error {

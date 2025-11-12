@@ -74,7 +74,19 @@ func (h *medicineHandler) UpdateMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) DeleteMedicine(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid medicine ID", nil)
+	}
+
+	if err := h.medicineService.DeleteMedicine(uint(id)); err != nil {
+		if err.Error() == "medicine not found" {
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to delete medicine")
+	}
+
+	return utils.SuccessResponse(c, "Medicine delete successfully", nil)
 }
 
 func (h *medicineHandler) HardDeleteMedicine(c *fiber.Ctx) error {
