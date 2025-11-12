@@ -103,7 +103,16 @@ func (h *medicineHandler) HardDeleteMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) RestoreMedicine(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid medicine ID", nil)
+	}
+
+	if err := h.medicineService.RestoreMedicine(uint(id)); err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to restore medicine")
+	}
+
+	return utils.SuccessResponse(c, "Medicine restore successfully", nil)
 }
 
 func (h *medicineHandler) GetByIDMedicine(c *fiber.Ctx) error {

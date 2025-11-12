@@ -45,7 +45,7 @@ func (r *medicineRepository) HardDelete(id uint) error {
 }
 
 func (r *medicineRepository) Restore(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Model(&models.Medicine{}).Unscoped().Where("id = ?", id).Update("deleted_at", nil).Error
 }
 
 func (r *medicineRepository) FindByID(id uint) (*models.Medicine, error) {

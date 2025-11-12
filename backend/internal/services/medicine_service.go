@@ -134,7 +134,10 @@ func (s *medicineService) HardDeleteMedicine(id uint) error {
 }
 
 func (s *medicineService) RestoreMedicine(id uint) error {
-	panic("not implemented") // TODO: Implement
+	if err := s.medicineRepo.Restore(id); err != nil {
+		return fmt.Errorf("failed to restore medicine: %w", err)
+	}
+	return nil
 }
 
 func (s *medicineService) GetMedicineByID(id uint) (*models.Medicine, error) {
