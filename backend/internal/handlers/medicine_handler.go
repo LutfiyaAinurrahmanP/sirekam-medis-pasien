@@ -135,7 +135,27 @@ func (h *medicineHandler) GetByIDMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) GetAllMedicine(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	var query validators.ListMedicineQuery
+
+	if err :=  c.QueryParser(&query); err != nil {
+		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
+	}
+
+	if err := validators.ValidateStruct(&query); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+	}
+
+	medicine, meta, err := h.medicineService.GetAllMedicine(&query)
+
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to fetch medicine")
+	}
+
+	return utils.PaginatedSeccessResponse(c, "Medicine retrieved successfully", fiber.Map{
+		"medicine": medicine,
+	}, meta)
 }
 
 func (h *medicineHandler) GetAllDeleteMedicine(c *fiber.Ctx) error {
