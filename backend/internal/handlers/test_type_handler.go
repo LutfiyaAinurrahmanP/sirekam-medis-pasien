@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
+	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -28,7 +30,28 @@ func NewTestTypeHandler(testTypeService services.TestTypeService) TestTypeHandle
 }
 
 func (h *testTypeHandler) CreateTestType(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+        var req validators.CreateTestTypeRequest
+
+		if err := validators.ParseAndValidate(c, &req); err != nil {
+			if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+				return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+			}
+			return utils.BadRequestResponse(c, err.Error(), nil)
+		}
+
+		testType, err := h.testTypeService.CreateTestType(&req)
+		if err != nil {
+			errorMessage := err.Error()
+
+			if errorMessage == "code already exists" {
+				return utils.ConflictResponse(c, errorMessage)
+			}
+			return utils.InternalServerErrorResponse(c, "Failed to create test type")
+		}
+
+		return utils.SuccessResponse(c, "Test Type successfully created", fiber.Map{
+			"test_type": testType,
+		})
 }
 
 func (h *testTypeHandler) UpdateTestType(c *fiber.Ctx) error {

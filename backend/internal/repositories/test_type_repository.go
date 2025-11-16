@@ -31,7 +31,7 @@ func NewTestTypeRepository(db *gorm.DB) TestTypeRepository{
 }
 
 func (r *testTypeRepository) Crete(testType *models.TestType) error {
-        panic("not implemented") // TODO: Implement
+        return r.db.Create(testType).Error
 }
 
 func (r *testTypeRepository) Update(testType *models.TestType) error {

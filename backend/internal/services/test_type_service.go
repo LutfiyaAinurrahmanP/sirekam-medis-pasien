@@ -1,6 +1,9 @@
 package services
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/models"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
@@ -30,7 +33,29 @@ func NewTestTypeService(testTypeRepo repositories.TestTypeRepository) TestTypeSe
 }
 
 func (s *testTypeService) CreateTestType(req *validators.CreateTestTypeRequest) (*models.TestType, error) {
-        panic("not implemented") // TODO: Implement
+        exists, err := s.testTypeRepo.ExistsByCode(req.Code)
+		if err != nil {
+			return nil, fmt.Errorf("failed to check code: %w", err)
+		}
+
+		if exists {
+			return nil, errors.New("code already exists")
+		}
+
+		testType := &models.TestType{
+			Name: req.Name,
+			Code: req.Code,
+			Category: req.Category,
+			Description: req.Description,
+			Price: req.Price,
+			IsActive: req.IsActive,
+		}
+
+		if err := s.testTypeRepo.Crete(testType); err != nil {
+			return nil, fmt.Errorf("failed to create test type: %w", err)
+		}
+
+		return testType, nil
 }
 
 func (s *testTypeService) UpdateTestType(id uint, req *validators.UpdateTestTypeRequest) (*models.TestType, error) {
