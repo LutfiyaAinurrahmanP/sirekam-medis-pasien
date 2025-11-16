@@ -90,5 +90,31 @@ func (r *medicineRepository) FindAll(query *validators.ListMedicineQuery) ([]mod
 }
 
 func (r *medicineRepository) FindAllDelete(query *validators.ListMedicineQuery) ([]models.Medicine, int64, error) {
-	panic("not implemented") // TODO: Implement
+	var medicines []models.Medicine
+	var total int64
+
+	db := r.db.Unscoped().Model(&models.Medicine{}).Where("deleted_at IS NOT NULL")
+	
+	if query.Search != ""{
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
+		db = db.Where(
+			"LOWER(name) LIKE ? OR LOWER(generic_name) LIKE ? OR LOWER(brand_name) LIKE ?",
+			searchPattern, searchPattern, searchPattern,
+		)
+	}
+
+	if err := db.Count(&total).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to count medicine: %w", err)
+	}
+
+	orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
+	db = db.Order(orderClause)
+
+	db = db.Limit(query.Limit).Offset(query.GetMedicineOffSet())
+
+	if err := db.Find(&medicines).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to fetch medicine: %w", err)
+	}
+
+	return medicines, total, nil
 }

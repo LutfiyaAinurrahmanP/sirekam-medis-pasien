@@ -170,5 +170,19 @@ func (s *medicineService) GetAllMedicine(query *validators.ListMedicineQuery) ([
 }
 
 func (s *medicineService) GetAllDeletedMedicine(query *validators.ListMedicineQuery) ([]models.Medicine, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+	query.SetMedicineDefaults()
+
+	medicines, total, err := s.medicineRepo.FindAll(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch medicines: %w", err)
+	}
+
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) - 1) / int64(query.Limit),
+	}
+
+	return medicines, meta, nil
 }
