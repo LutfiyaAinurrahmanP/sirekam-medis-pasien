@@ -45,6 +45,7 @@ func main() {
 		&models.TokenBlacklist{}, // Token blacklist untuk logout
 		&models.Department{},     // Department model
 		&models.Medicine{},
+		&models.TestType{},
 		&models.Appointment{},
 		&models.Doctor{},
 		&models.Patient{},
@@ -65,6 +66,7 @@ func main() {
 	departmentRepo := repositories.NewDepartmentRepository(db)
 	patientRepo := repositories.NewPatientRepository(db)
 	medicineRepo := repositories.NewMedicineRepository(db)
+	testTypeRepo := repositories.NewTestTypeRepository(db)
 	appointmentRepo := repositories.NewAppointmentRepository(db)
 
 	// Service Layer
@@ -73,6 +75,7 @@ func main() {
 	departmentService := services.NewDepartmentService(departmentRepo)
 	patientService := services.NewPatientService(patientRepo)
 	medicineService := services.NewMedicineService(medicineRepo)
+	testTypeService := services.NewTestTypeService(testTypeRepo)
 	appointmentService := services.NewAppointmentService(appointmentRepo)
 
 	// Handler Layer
@@ -81,6 +84,7 @@ func main() {
 	departmentHandler := handlers.NewDepartmentHandler(departmentService)
 	patientHandler := handlers.NewPatientHandler(patientService)
 	medicineHandler := handlers.NewMedicineHandler(medicineService)
+	testTypeHandler := handlers.NewTestTypeHandler(testTypeService)
 	appointmentHandler := handlers.NewAppointmentHandler(appointmentService)
 
 	log.Println("✅ Dependencies initialized successfully")
@@ -145,6 +149,7 @@ func main() {
 		DepartmentHandler:  departmentHandler,
 		PatientHandler:     patientHandler,
 		MedicineHandler:    medicineHandler,
+		TestTypeHandler: testTypeHandler,
 		AppointmentHandler: appointmentHandler,
 		JWTSecret:          cfg.JWTSecret,
 		TokenRepo:          tokenRepo,

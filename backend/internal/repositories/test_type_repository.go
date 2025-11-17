@@ -63,5 +63,7 @@ func (r *testTypeRepository) FindAllDelete(query *validators.ListTestTypeQuery) 
 }
 
 func (r *testTypeRepository) ExistsByCode(testTypeCode string) (bool, error) {
-        panic("not implemented") // TODO: Implement
+        var count int64
+		err := r.db.Model(&models.TestType{}).Where("code = ?", testTypeCode).Count(&count).Error
+		return count > 0, err
 }
