@@ -94,8 +94,8 @@ func (r *medicineRepository) FindAllDelete(query *validators.ListMedicineQuery) 
 	var total int64
 
 	db := r.db.Unscoped().Model(&models.Medicine{}).Where("deleted_at IS NOT NULL")
-	
-	if query.Search != ""{
+
+	if query.Search != "" {
 		searchPattern := "%" + strings.ToLower(query.Search) + "%"
 		db = db.Where(
 			"LOWER(name) LIKE ? OR LOWER(generic_name) LIKE ? OR LOWER(brand_name) LIKE ?",

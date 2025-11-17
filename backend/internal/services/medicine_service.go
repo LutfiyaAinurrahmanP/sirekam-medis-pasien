@@ -57,7 +57,7 @@ func (s *medicineService) CreateMedicine(req *validators.CreateMedicineRequest) 
 func (s *medicineService) UpdateMedicine(id uint, req *validators.UpdateMedicineRequest) (*models.Medicine, error) {
 	medicine, err := s.medicineRepo.FindByID(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("medicine not found")
 		}
 		return nil, fmt.Errorf("failed to find medicine: %w", err)
@@ -113,7 +113,7 @@ func (s *medicineService) UpdateMedicine(id uint, req *validators.UpdateMedicine
 func (s *medicineService) DeleteMedicine(id uint) error {
 	_, err := s.medicineRepo.FindByID(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("medicine not found")
 		}
 		return fmt.Errorf("failed to find medicine ID: %w", err)
@@ -143,7 +143,7 @@ func (s *medicineService) RestoreMedicine(id uint) error {
 func (s *medicineService) GetMedicineByID(id uint) (*models.Medicine, error) {
 	medicine, err := s.medicineRepo.FindByID(id)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("medicine not found")
 		}
 		return nil, fmt.Errorf("failed to get medicine: %w", err)
@@ -161,9 +161,9 @@ func (s *medicineService) GetAllMedicine(query *validators.ListMedicineQuery) ([
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) - 1) / int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 
 	return medicines, meta, nil
@@ -179,9 +179,9 @@ func (s *medicineService) GetAllDeletedMedicine(query *validators.ListMedicineQu
 
 	meta := &utils.PaginationMeta{
 		CurrentPage: query.Page,
-		PerPage: query.Limit,
-		Total: total,
-		TotalPages: (total + int64(query.Limit) - 1) / int64(query.Limit),
+		PerPage:     query.Limit,
+		Total:       total,
+		TotalPages:  (total + int64(query.Limit) - 1) / int64(query.Limit),
 	}
 
 	return medicines, meta, nil

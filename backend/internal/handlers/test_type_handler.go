@@ -30,54 +30,54 @@ func NewTestTypeHandler(testTypeService services.TestTypeService) TestTypeHandle
 }
 
 func (h *testTypeHandler) CreateTestType(c *fiber.Ctx) error {
-        var req validators.CreateTestTypeRequest
+	var req validators.CreateTestTypeRequest
 
-		if err := validators.ParseAndValidate(c, &req); err != nil {
-			if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
-				return utils.BadRequestResponse(c, "Validation failed", validationErrors)
-			}
-			return utils.BadRequestResponse(c, err.Error(), nil)
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
 		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
 
-		testType, err := h.testTypeService.CreateTestType(&req)
-		if err != nil {
-			errorMessage := err.Error()
+	testType, err := h.testTypeService.CreateTestType(&req)
+	if err != nil {
+		errorMessage := err.Error()
 
-			if errorMessage == "code already exists" {
-				return utils.ConflictResponse(c, errorMessage)
-			}
-			return utils.InternalServerErrorResponse(c, "Failed to create test type")
+		if errorMessage == "code already exists" {
+			return utils.ConflictResponse(c, errorMessage)
 		}
+		return utils.InternalServerErrorResponse(c, "Failed to create test type")
+	}
 
-		return utils.SuccessResponse(c, "Test Type successfully created", fiber.Map{
-			"test_type": testType,
-		})
+	return utils.SuccessResponse(c, "Test Type successfully created", fiber.Map{
+		"test_type": testType,
+	})
 }
 
 func (h *testTypeHandler) UpdateTestType(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *testTypeHandler) DeleteTestType(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
-func (h *testTypeHandler) HardDeleteTestType(c *fiber.Ctx) error {      
-        panic("not implemented") // TODO: Implement
+func (h *testTypeHandler) HardDeleteTestType(c *fiber.Ctx) error {
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *testTypeHandler) RestoreTestType(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *testTypeHandler) GetTestTypeByID(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
 func (h *testTypeHandler) GetAllTestType(c *fiber.Ctx) error {
-        panic("not implemented") // TODO: Implement
+	panic("not implemented") // TODO: Implement
 }
 
-func (h *testTypeHandler) GetAllDeleteTestType(c *fiber.Ctx) error {    
-        panic("not implemented") // TODO: Implement
+func (h *testTypeHandler) GetAllDeleteTestType(c *fiber.Ctx) error {
+	panic("not implemented") // TODO: Implement
 }

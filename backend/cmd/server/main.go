@@ -149,7 +149,7 @@ func main() {
 		DepartmentHandler:  departmentHandler,
 		PatientHandler:     patientHandler,
 		MedicineHandler:    medicineHandler,
-		TestTypeHandler: testTypeHandler,
+		TestTypeHandler:    testTypeHandler,
 		AppointmentHandler: appointmentHandler,
 		JWTSecret:          cfg.JWTSecret,
 		TokenRepo:          tokenRepo,

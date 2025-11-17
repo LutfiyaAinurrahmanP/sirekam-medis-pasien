@@ -116,14 +116,14 @@ func (h *medicineHandler) RestoreMedicine(c *fiber.Ctx) error {
 }
 
 func (h *medicineHandler) GetByIDMedicine(c *fiber.Ctx) error {
-	id, err := strconv.ParseUint(c.Params("id"), 10, 32);
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
 	if err != nil {
 		return utils.BadRequestResponse(c, "Invalid medicine ID: %w", err)
 	}
 
 	medicine, err := h.medicineService.GetMedicineByID(uint(id))
 	if err != nil {
-		if err.Error() == "medicine not found"{
+		if err.Error() == "medicine not found" {
 			return utils.NotFoundResponse(c, err.Error())
 		}
 		return utils.InternalServerErrorResponse(c, "Failed to fetch medicine")
@@ -137,7 +137,7 @@ func (h *medicineHandler) GetByIDMedicine(c *fiber.Ctx) error {
 func (h *medicineHandler) GetAllMedicine(c *fiber.Ctx) error {
 	var query validators.ListMedicineQuery
 
-	if err :=  c.QueryParser(&query); err != nil {
+	if err := c.QueryParser(&query); err != nil {
 		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
 	}
 
