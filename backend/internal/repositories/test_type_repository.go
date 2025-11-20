@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/models"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
 	"gorm.io/gorm"
@@ -55,7 +58,33 @@ func (r *testTypeRepository) FindById(id uint) (*models.TestType, error) {
 }
 
 func (r *testTypeRepository) FindAll(query *validators.ListTestTypeQuery) ([]models.TestType, int64, error) {
-	panic("not implemented") // TODO: Implement
+	var testType []models.TestType
+	var total int64
+
+	db := r.db.Model(&models.TestType{})
+
+	if query.Search != "" {
+		searchPattern := "%" + strings.ToLower(query.Search) + "%"
+		db = db.Where(
+			"LOWER(name) LIKE ? OR LOWER(code) LIKE ? OR LOWER(category) LIKE ?",
+			searchPattern, searchPattern, searchPattern,
+		)
+	}
+
+	if err := db.Count(&total).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to count test type: %w", err)
+	}
+
+	orderClause := fmt.Sprintf("%s %s", query.SortBy, query.Sort)
+	db = db.Order(orderClause)
+
+	db = db.Limit(query.Limit).Offset(query.GetTestTypeOffSet())
+
+	if err := db.Find(&testType).Error; err != nil {
+		return nil, 0, fmt.Errorf("failed to fetch test type: %w", err)
+	}
+
+	return testType, total, nil
 }
 
 func (r *testTypeRepository) FindAllDelete(query *validators.ListTestTypeQuery) ([]models.TestType, int64, error) {

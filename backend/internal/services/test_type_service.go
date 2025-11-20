@@ -79,7 +79,20 @@ func (s *testTypeService) GetTestTypeByID(id uint) (*models.TestType, error) {
 }
 
 func (s *testTypeService) GetAllTestType(query *validators.ListTestTypeQuery) ([]models.TestType, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+	query.SetTestTypeDefaults()
+
+	testTypes, total, err := s.testTypeRepo.FindAll(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch test type: %w", err)
+	}
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) - 1) / int64(query.Limit),
+	}
+
+	return testTypes, meta, nil
 }
 
 func (s *testTypeService) GetAllDeleteTestType(query *validators.ListTestTypeQuery) ([]models.TestType, *utils.PaginationMeta, error) {

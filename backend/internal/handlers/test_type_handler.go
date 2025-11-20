@@ -75,7 +75,26 @@ func (h *testTypeHandler) GetTestTypeByID(c *fiber.Ctx) error {
 }
 
 func (h *testTypeHandler) GetAllTestType(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	var query validators.ListTestTypeQuery
+
+	if err := c.QueryParser(&query); err != nil{
+		return utils.BadRequestResponse(c, "Invalid query parameters", nil)
+	}
+
+	if err := validators.ValidateStruct(&query); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+	}
+
+	testTypes, meta, err := h.testTypeService.GetAllTestType(&query)
+	if err != nil {
+		return utils.InternalServerErrorResponse(c, "Failed to fetch test types")
+	}
+
+	return utils.PaginatedSeccessResponse(c, "Test types retrieved successfully", fiber.Map{
+		"test_type": testTypes,
+	}, meta)
 }
 
 func (h *testTypeHandler) GetAllDeleteTestType(c *fiber.Ctx) error {
