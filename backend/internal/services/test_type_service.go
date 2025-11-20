@@ -96,5 +96,18 @@ func (s *testTypeService) GetAllTestType(query *validators.ListTestTypeQuery) ([
 }
 
 func (s *testTypeService) GetAllDeleteTestType(query *validators.ListTestTypeQuery) ([]models.TestType, *utils.PaginationMeta, error) {
-	panic("not implemented") // TODO: Implement
+	query.SetTestTypeDefaults()
+
+	testTypes, total, err := s.testTypeRepo.FindAllDelete(query)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to fetch test types: %w", err)
+	}
+	meta := &utils.PaginationMeta{
+		CurrentPage: query.Page,
+		PerPage: query.Limit,
+		Total: total,
+		TotalPages: (total + int64(query.Limit) - 1) / int64(query.Limit),
+	}
+
+	return testTypes, meta, nil	
 }
