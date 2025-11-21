@@ -60,7 +60,50 @@ func (s *testTypeService) CreateTestType(req *validators.CreateTestTypeRequest) 
 }
 
 func (s *testTypeService) UpdateTestType(id uint, req *validators.UpdateTestTypeRequest) (*models.TestType, error) {
-	panic("not implemented") // TODO: Implement
+	testType, err := s.testTypeRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			return nil, fmt.Errorf("test type not found")
+		}
+		return nil, fmt.Errorf("failed to find test type: %w", err)
+	}
+
+	if req.Code != "" && req.Code != testType.Code {
+		exists, err := s.testTypeRepo.ExistsByCode(req.Code)
+		if err != nil {
+			return nil, fmt.Errorf("failed to check test type code: %w", err)
+		}
+
+		if exists {
+			return nil, errors.New("test type code already exists")
+		}
+		testType.Code = req.Code
+	}
+	
+	if req.Name != "" && req.Name != testType.Name{
+		testType.Name = req.Name
+	}
+
+	if req.Category != "" && req.Category != testType.Category {
+		testType.Category = req.Category
+	}
+
+	if req.Description != "" && req.Description != testType.Description {
+		testType.Description = req.Description
+	}
+
+	if req.Price != nil && req.Price != testType.Price {
+		testType.Price = req.Price
+	}
+
+	if req.IsActive != testType.IsActive {
+		testType.IsActive = req.IsActive
+	}
+
+	if err := s.testTypeRepo.Update(testType); err != nil {
+		return nil, fmt.Errorf("failed to updated test type: %w", err)
+	}
+	return testType, nil
 }
 
 func (s *testTypeService) DeleteTestType(id uint) error {

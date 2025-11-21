@@ -57,7 +57,31 @@ func (h *testTypeHandler) CreateTestType(c *fiber.Ctx) error {
 }
 
 func (h *testTypeHandler) UpdateTestType(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid test type id", nil)
+	}
+
+	var req validators.UpdateTestTypeRequest
+	if err := validators.ParseAndValidate(c, &req); err != nil {
+		if validationErrors := validators.FormatValidationError(err); len(validationErrors) > 0 {
+			return utils.BadRequestResponse(c, "Validation failed", validationErrors)
+		}
+		return utils.BadRequestResponse(c, err.Error(), nil)
+	}
+
+	testType, err := h.testTypeService.UpdateTestType(uint(id), &req)
+	if err != nil {
+		errorMessage := err.Error()
+		if errorMessage == "test type code already exists" {
+			return utils.ConflictResponse(c, errorMessage)
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to update test type")
+	}
+
+	return utils.SuccessResponse(c, "Test type updated successfully", fiber.Map{
+		"test_type": testType,
+	})
 }
 
 func (h *testTypeHandler) DeleteTestType(c *fiber.Ctx) error {
