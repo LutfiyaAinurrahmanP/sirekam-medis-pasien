@@ -107,7 +107,19 @@ func (s *testTypeService) UpdateTestType(id uint, req *validators.UpdateTestType
 }
 
 func (s *testTypeService) DeleteTestType(id uint) error {
-	panic("not implemented") // TODO: Implement
+	_, err := s.testTypeRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			return errors.New("test type not found")
+		}
+		return fmt.Errorf("failed to get test type: %w", err)
+	}
+
+	if err := s.testTypeRepo.Delete(id); err != nil {
+		return fmt.Errorf("failed to delete test type: %w", err)
+	}
+
+	return nil
 }
 
 func (s *testTypeService) HardDeleteTestType(id uint) error {

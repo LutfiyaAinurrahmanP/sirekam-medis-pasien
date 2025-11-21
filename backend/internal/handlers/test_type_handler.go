@@ -85,7 +85,19 @@ func (h *testTypeHandler) UpdateTestType(c *fiber.Ctx) error {
 }
 
 func (h *testTypeHandler) DeleteTestType(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid test type ID", nil)
+	}
+
+	if err := h.testTypeService.DeleteTestType(uint(id)); err != nil {
+		if err.Error() == "test type not found" {
+			return  utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to delete test type")
+	}
+
+	return utils.SuccessResponse(c, "Test type deleted successfully", nil)
 }
 
 func (h *testTypeHandler) HardDeleteTestType(c *fiber.Ctx) error {

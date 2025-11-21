@@ -42,7 +42,7 @@ func (r *testTypeRepository) Update(testType *models.TestType) error {
 }
 
 func (r *testTypeRepository) Delete(id uint) error {
-	panic("not implemented") // TODO: Implement
+	return r.db.Delete(&models.TestType{},id).Error
 }
 
 func (r *testTypeRepository) HardDelete(id uint) error {
