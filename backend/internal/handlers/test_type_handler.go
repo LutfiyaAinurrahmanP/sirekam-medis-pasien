@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"strconv"
+
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/services"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
@@ -71,7 +73,21 @@ func (h *testTypeHandler) RestoreTestType(c *fiber.Ctx) error {
 }
 
 func (h *testTypeHandler) GetTestTypeByID(c *fiber.Ctx) error {
-	panic("not implemented") // TODO: Implement
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return utils.BadRequestResponse(c, "Invalid test type ID", nil)
+	}
+
+	testType, err := h.testTypeService.GetTestTypeByID(uint(id))
+	if err != nil {
+		if err.Error() == "test type not found" {
+			return utils.NotFoundResponse(c, err.Error())
+		}
+		return utils.InternalServerErrorResponse(c, "Failed to fetch test type")
+	}
+	return utils.SuccessResponse(c, "Test type retrieved successfully", fiber.Map{
+		"test_type": testType,
+	})
 }
 
 func (h *testTypeHandler) GetAllTestType(c *fiber.Ctx) error {

@@ -54,7 +54,12 @@ func (r *testTypeRepository) Restore(id uint) error {
 }
 
 func (r *testTypeRepository) FindById(id uint) (*models.TestType, error) {
-	panic("not implemented") // TODO: Implement
+	var testType models.TestType
+	err := r.db.First(&testType, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &testType, nil
 }
 
 func (r *testTypeRepository) FindAll(query *validators.ListTestTypeQuery) ([]models.TestType, int64, error) {

@@ -8,6 +8,7 @@ import (
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/repositories"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/utils"
 	"github.com/LutfiyaAinurrahmanP/sirekam-medis-pasien/internal/validators"
+	"gorm.io/gorm"
 )
 
 type TestTypeService interface {
@@ -75,7 +76,14 @@ func (s *testTypeService) RestoreTestType(id uint) error {
 }
 
 func (s *testTypeService) GetTestTypeByID(id uint) (*models.TestType, error) {
-	panic("not implemented") // TODO: Implement
+	testType, err := s.testTypeRepo.FindById(id)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("test type not found")
+		}
+		return nil, fmt.Errorf("failed to get test type: %w", err)
+	}
+	return testType, nil
 }
 
 func (s *testTypeService) GetAllTestType(query *validators.ListTestTypeQuery) ([]models.TestType, *utils.PaginationMeta, error) {
